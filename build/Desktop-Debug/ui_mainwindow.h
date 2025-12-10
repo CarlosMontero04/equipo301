@@ -11,9 +11,13 @@
 
 #include <QtCore/QVariant>
 #include <QtWidgets/QApplication>
+#include <QtWidgets/QHeaderView>
+#include <QtWidgets/QLabel>
 #include <QtWidgets/QMainWindow>
 #include <QtWidgets/QMenuBar>
+#include <QtWidgets/QPushButton>
 #include <QtWidgets/QStatusBar>
+#include <QtWidgets/QTableWidget>
 #include <QtWidgets/QWidget>
 
 QT_BEGIN_NAMESPACE
@@ -22,6 +26,10 @@ class Ui_MainWindow
 {
 public:
     QWidget *centralwidget;
+    QLabel *label;
+    QTableWidget *tablaAsignaciones;
+    QPushButton *btnCalcular;
+    QPushButton *btnConfirmar;
     QMenuBar *menubar;
     QStatusBar *statusbar;
 
@@ -32,7 +40,36 @@ public:
         MainWindow->resize(800, 600);
         centralwidget = new QWidget(MainWindow);
         centralwidget->setObjectName("centralwidget");
+        label = new QLabel(centralwidget);
+        label->setObjectName("label");
+        label->setGeometry(QRect(200, 7, 401, 41));
+        QFont font;
+        font.setPointSize(14);
+        font.setBold(true);
+        label->setFont(font);
+        tablaAsignaciones = new QTableWidget(centralwidget);
+        if (tablaAsignaciones->columnCount() < 3)
+            tablaAsignaciones->setColumnCount(3);
+        QTableWidgetItem *__qtablewidgetitem = new QTableWidgetItem();
+        tablaAsignaciones->setHorizontalHeaderItem(0, __qtablewidgetitem);
+        QTableWidgetItem *__qtablewidgetitem1 = new QTableWidgetItem();
+        tablaAsignaciones->setHorizontalHeaderItem(1, __qtablewidgetitem1);
+        QTableWidgetItem *__qtablewidgetitem2 = new QTableWidgetItem();
+        tablaAsignaciones->setHorizontalHeaderItem(2, __qtablewidgetitem2);
+        tablaAsignaciones->setObjectName("tablaAsignaciones");
+        tablaAsignaciones->setGeometry(QRect(80, 70, 631, 381));
+        btnCalcular = new QPushButton(centralwidget);
+        btnCalcular->setObjectName("btnCalcular");
+        btnCalcular->setGeometry(QRect(140, 510, 211, 26));
+        btnConfirmar = new QPushButton(centralwidget);
+        btnConfirmar->setObjectName("btnConfirmar");
+        btnConfirmar->setEnabled(false);
+        btnConfirmar->setGeometry(QRect(430, 510, 201, 26));
         MainWindow->setCentralWidget(centralwidget);
+        tablaAsignaciones->raise();
+        label->raise();
+        btnCalcular->raise();
+        btnConfirmar->raise();
         menubar = new QMenuBar(MainWindow);
         menubar->setObjectName("menubar");
         menubar->setGeometry(QRect(0, 0, 800, 23));
@@ -49,6 +86,15 @@ public:
     void retranslateUi(QMainWindow *MainWindow)
     {
         MainWindow->setWindowTitle(QCoreApplication::translate("MainWindow", "MainWindow", nullptr));
+        label->setText(QCoreApplication::translate("MainWindow", "ASIGNACI\303\223N AUTOM\303\201TICA DE TUTORES", nullptr));
+        QTableWidgetItem *___qtablewidgetitem = tablaAsignaciones->horizontalHeaderItem(0);
+        ___qtablewidgetitem->setText(QCoreApplication::translate("MainWindow", "Estudiante", nullptr));
+        QTableWidgetItem *___qtablewidgetitem1 = tablaAsignaciones->horizontalHeaderItem(1);
+        ___qtablewidgetitem1->setText(QCoreApplication::translate("MainWindow", "Promedio", nullptr));
+        QTableWidgetItem *___qtablewidgetitem2 = tablaAsignaciones->horizontalHeaderItem(2);
+        ___qtablewidgetitem2->setText(QCoreApplication::translate("MainWindow", "Tutor Propuesto", nullptr));
+        btnCalcular->setText(QCoreApplication::translate("MainWindow", "CALCULAR ASIGNACI\303\223N", nullptr));
+        btnConfirmar->setText(QCoreApplication::translate("MainWindow", "CONFIRMAR Y GUARDAR", nullptr));
     } // retranslateUi
 
 };

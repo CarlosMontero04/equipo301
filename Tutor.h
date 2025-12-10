@@ -11,6 +11,11 @@ public:
 
     Tutor(int id, QString nombre, int cupoMax, int cupoAct)
         : id(id), nombre(nombre), cupoMaximo(cupoMax), cupoActual(cupoAct) {}
+
+    // --- ESTA ES LA FUNCIÓN QUE FALTABA ---
+    bool tieneCupo() const {
+        return cupoActual < cupoMaximo;
+    }
 };
 
 #endif // TUTOR_H

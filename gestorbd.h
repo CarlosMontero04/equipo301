@@ -8,6 +8,7 @@
 #include <QDebug>
 #include "Estudiante.h"
 #include "Tutor.h"
+#include <QMap>
 
 class GestorBD
 {
@@ -17,6 +18,7 @@ public:
     void cerrar();
     QList<Estudiante> obtenerEstudiantesSinTutor();
     QList<Tutor> obtenerTutoresDisponibles();
+    bool confirmarAsignaciones(QMap<int, int> asignaciones);
 
 private:
     QSqlDatabase db;

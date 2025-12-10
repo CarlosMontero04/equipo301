@@ -52,3 +52,54 @@ QList<Tutor> GestorBD::obtenerTutoresDisponibles() {
     }
     return lista;
 }
+bool GestorBD::confirmarAsignaciones(QMap<int, int> asignaciones) {
+    if (!db.isOpen()) conectar();
+
+    // INICIAR TRANSACCIÓN (Paso crítico para seguridad de datos)
+    if (!db.transaction()) {
+        qDebug() << "Error al iniciar transacción";
+        return false;
+    }
+
+    QSqlQuery queryInsert;
+    QSqlQuery queryUpdate;
+    bool error = false;
+
+    // Recorremos el mapa (Key = ID Estudiante, Value = ID Tutor)
+    QMapIterator<int, int> i(asignaciones);
+    while (i.hasNext()) {
+        i.next();
+        int idEst = i.key();
+        int idTut = i.value();
+
+        // 1. Guardar en Histórico (Tabla asignaciones) - Requisito RI-3
+        queryInsert.prepare("INSERT INTO asignaciones (id_estudiante, id_tutor, fecha_inicio, estado, curso_academico) "
+                            "VALUES (:est, :tut, NOW(), 'Activa', '2024-2025')");
+        queryInsert.bindValue(":est", idEst);
+        queryInsert.bindValue(":tut", idTut);
+
+        if (!queryInsert.exec()) {
+            qDebug() << "Error insertando asignación:" << queryInsert.lastError().text();
+            error = true;
+            break;
+        }
+
+        // 2. Actualizar Estudiante (Tabla estudiantes) - Para que ya no salga como "pendiente"
+        queryUpdate.prepare("UPDATE estudiantes SET id_tutor = :tut WHERE id = :est");
+        queryUpdate.bindValue(":tut", idTut);
+        queryUpdate.bindValue(":est", idEst);
+
+        if (!queryUpdate.exec()) {
+            qDebug() << "Error actualizando estudiante:" << queryUpdate.lastError().text();
+            error = true;
+            break;
+        }
+    }
+
+    if (error) {
+        db.rollback(); // Si algo falló, deshacemos TODO
+        return false;
+    } else {
+        return db.commit(); // Si todo fue bien, guardamos definitivamente
+    }
+}
