@@ -8,9 +8,10 @@ public:
     QString nombre;
     double promedio;
     int idTutor;
+    QString titulacion;
 
-    Estudiante(int id, QString nombre, double promedio, int idTutor = 0)
-        : id(id), nombre(nombre), promedio(promedio), idTutor(idTutor) {}
+    Estudiante(int id, QString nombre, QString titulacion, double promedio, int idTutor = 0)
+        : id(id), nombre(nombre), titulacion(titulacion), promedio(promedio), idTutor(idTutor) {}
 };
 
 #endif // ESTUDIANTE_H

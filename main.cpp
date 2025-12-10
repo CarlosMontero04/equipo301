@@ -1,4 +1,4 @@
-#include "mainwindow.h"
+#include "loginwindow.h"
 #include <QApplication>
 #include "gestorbd.h" // Incluimos nuestro gestor
 
@@ -14,7 +14,7 @@ int main(int argc, char *argv[])
     }
     // ----------------------
 
-    MainWindow w;
+    LoginWindow w;
     w.show();
     return a.exec();
 }

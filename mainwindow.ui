@@ -87,10 +87,24 @@
      <string>CONFIRMAR Y GUARDAR</string>
     </property>
    </widget>
+   <widget class="QPushButton" name="btnCerrarSesion">
+    <property name="geometry">
+     <rect>
+      <x>680</x>
+      <y>10</y>
+      <width>101</width>
+      <height>26</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>cerrar sesión</string>
+    </property>
+   </widget>
    <zorder>tablaAsignaciones</zorder>
    <zorder>label</zorder>
    <zorder>btnCalcular</zorder>
    <zorder>btnConfirmar</zorder>
+   <zorder>btnCerrarSesion</zorder>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">

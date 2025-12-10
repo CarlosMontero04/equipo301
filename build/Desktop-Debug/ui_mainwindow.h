@@ -30,6 +30,7 @@ public:
     QTableWidget *tablaAsignaciones;
     QPushButton *btnCalcular;
     QPushButton *btnConfirmar;
+    QPushButton *btnCerrarSesion;
     QMenuBar *menubar;
     QStatusBar *statusbar;
 
@@ -65,11 +66,15 @@ public:
         btnConfirmar->setObjectName("btnConfirmar");
         btnConfirmar->setEnabled(false);
         btnConfirmar->setGeometry(QRect(430, 510, 201, 26));
+        btnCerrarSesion = new QPushButton(centralwidget);
+        btnCerrarSesion->setObjectName("btnCerrarSesion");
+        btnCerrarSesion->setGeometry(QRect(680, 10, 101, 26));
         MainWindow->setCentralWidget(centralwidget);
         tablaAsignaciones->raise();
         label->raise();
         btnCalcular->raise();
         btnConfirmar->raise();
+        btnCerrarSesion->raise();
         menubar = new QMenuBar(MainWindow);
         menubar->setObjectName("menubar");
         menubar->setGeometry(QRect(0, 0, 800, 23));
@@ -95,6 +100,7 @@ public:
         ___qtablewidgetitem2->setText(QCoreApplication::translate("MainWindow", "Tutor Propuesto", nullptr));
         btnCalcular->setText(QCoreApplication::translate("MainWindow", "CALCULAR ASIGNACI\303\223N", nullptr));
         btnConfirmar->setText(QCoreApplication::translate("MainWindow", "CONFIRMAR Y GUARDAR", nullptr));
+        btnCerrarSesion->setText(QCoreApplication::translate("MainWindow", "cerrar sesi\303\263n", nullptr));
     } // retranslateUi
 
 };

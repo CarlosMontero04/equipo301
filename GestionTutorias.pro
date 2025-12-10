@@ -10,6 +10,7 @@ CONFIG += c++17
 
 SOURCES += \
     gestorbd.cpp \
+    loginwindow.cpp \
     main.cpp \
     mainwindow.cpp
 
@@ -17,9 +18,11 @@ HEADERS += \
     Estudiante.h \
     Tutor.h \
     gestorbd.h \
+    loginwindow.h \
     mainwindow.h
 
 FORMS += \
+    loginwindow.ui \
     mainwindow.ui
 
 # Default rules for deployment.

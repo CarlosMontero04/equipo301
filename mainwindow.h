@@ -22,6 +22,8 @@ private slots:
 
     void on_btnConfirmar_clicked();
 
+    void on_btnCerrarSesion_clicked();
+
 private:
     Ui::MainWindow *ui;
 };

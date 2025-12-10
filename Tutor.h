@@ -8,9 +8,10 @@ public:
     QString nombre;
     int cupoMaximo;
     int cupoActual;
+    QString departamento;
 
-    Tutor(int id, QString nombre, int cupoMax, int cupoAct)
-        : id(id), nombre(nombre), cupoMaximo(cupoMax), cupoActual(cupoAct) {}
+    Tutor(int id, QString nombre, QString dep, int cupoMax, int cupoAct)
+        : id(id), nombre(nombre), departamento(dep), cupoMaximo(cupoMax), cupoActual(cupoAct) {}
 
     // --- ESTA ES LA FUNCIÓN QUE FALTABA ---
     bool tieneCupo() const {

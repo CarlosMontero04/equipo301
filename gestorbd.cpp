@@ -25,13 +25,19 @@ QList<Estudiante> GestorBD::obtenerEstudiantesSinTutor() {
     QList<Estudiante> lista;
     if (!db.isOpen()) conectar();
 
-    QSqlQuery query("SELECT id, nombre, promedio FROM estudiantes WHERE id_tutor IS NULL ORDER BY promedio DESC");
-    while (query.next()) {
-        lista.append(Estudiante(
-            query.value("id").toInt(),
-            query.value("nombre").toString(),
-            query.value("promedio").toDouble()
-            ));
+    QSqlQuery query;
+    // CAMBIO CLAVE: ORDER BY nombre ASC (Alfabético A-Z)
+    query.prepare("SELECT id, nombre, titulacion, promedio FROM estudiantes WHERE id_tutor IS NULL ORDER BY nombre ASC");
+
+    if (query.exec()) {
+        while (query.next()) {
+            lista.append(Estudiante(
+                query.value("id").toInt(),
+                query.value("nombre").toString(),
+                query.value("titulacion").toString(), // <--- Leemos titulación
+                query.value("promedio").toDouble()
+                ));
+        }
     }
     return lista;
 }
@@ -40,12 +46,12 @@ QList<Tutor> GestorBD::obtenerTutoresDisponibles() {
     QList<Tutor> lista;
     if (!db.isOpen()) conectar();
 
-    // Nota: Por ahora usamos cupo_actual tal cual está en la BD.
-    QSqlQuery query("SELECT id, nombre, cupo_maximo, cupo_actual FROM tutores");
+    QSqlQuery query("SELECT id, nombre, departamento, cupo_maximo, cupo_actual FROM tutores");
     while (query.next()) {
         lista.append(Tutor(
             query.value("id").toInt(),
             query.value("nombre").toString(),
+            query.value("departamento").toString(), // <--- Leemos departamento
             query.value("cupo_maximo").toInt(),
             query.value("cupo_actual").toInt()
             ));
