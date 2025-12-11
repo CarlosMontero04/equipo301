@@ -26,15 +26,17 @@ QList<Estudiante> GestorBD::obtenerEstudiantesSinTutor() {
     if (!db.isOpen()) conectar();
 
     QSqlQuery query;
-    // CAMBIO CLAVE: ORDER BY nombre ASC (Alfabético A-Z)
-    query.prepare("SELECT id, nombre, titulacion, promedio FROM estudiantes WHERE id_tutor IS NULL ORDER BY nombre ASC");
+
+    // MEJORA H2: Ordenamos por 'curso ASC' (1º primero) y luego nombre
+    query.prepare("SELECT id, nombre, titulacion, curso, promedio FROM estudiantes WHERE id_tutor IS NULL ORDER BY curso ASC, nombre ASC");
 
     if (query.exec()) {
         while (query.next()) {
             lista.append(Estudiante(
                 query.value("id").toInt(),
                 query.value("nombre").toString(),
-                query.value("titulacion").toString(), // <--- Leemos titulación
+                query.value("titulacion").toString(),
+                query.value("curso").toInt(), // <--- Leemos el curso
                 query.value("promedio").toDouble()
                 ));
         }
@@ -44,14 +46,24 @@ QList<Estudiante> GestorBD::obtenerEstudiantesSinTutor() {
 
 QList<Tutor> GestorBD::obtenerTutoresDisponibles() {
     QList<Tutor> lista;
-    if (!db.isOpen()) conectar();
+    // Usamos la conexión inteligente que arreglamos antes
+    if (QSqlDatabase::contains("qt_sql_default_connection")) {
+        db = QSqlDatabase::database("qt_sql_default_connection");
+    } else {
+        conectar();
+    }
 
+    if (!db.isOpen()) return lista;
+
+    // --- AQUÍ ESTABA EL ERROR PROBABLE ---
+    // Es vital que seleccionemos 'departamento' para poder comparar facultades
     QSqlQuery query("SELECT id, nombre, departamento, cupo_maximo, cupo_actual FROM tutores");
+
     while (query.next()) {
         lista.append(Tutor(
             query.value("id").toInt(),
             query.value("nombre").toString(),
-            query.value("departamento").toString(), // <--- Leemos departamento
+            query.value("departamento").toString(), // <--- IMPORTANTE: Leer el departamento
             query.value("cupo_maximo").toInt(),
             query.value("cupo_actual").toInt()
             ));
@@ -108,4 +120,31 @@ bool GestorBD::confirmarAsignaciones(QMap<int, int> asignaciones) {
     } else {
         return db.commit(); // Si todo fue bien, guardamos definitivamente
     }
+}
+QStringList GestorBD::obtenerListaFacultades() {
+    QStringList lista;
+    if (!db.isOpen()) conectar();
+
+    QSqlQuery query("SELECT DISTINCT titulacion FROM estudiantes ORDER BY titulacion ASC");
+
+    // Añadimos una opción por defecto para "Hacerlo todo"
+    lista.append("--- TODAS LAS FACULTADES ---");
+
+    while (query.next()) {
+        lista.append(query.value(0).toString());
+    }
+    return lista;
+}
+bool GestorBD::reiniciarDatos() {
+    QSqlQuery query;
+    // 1. Borra el historial de uniones (Correcto)
+    query.exec("DELETE FROM asignaciones");
+
+    // 2. Libera a los alumnos (Correcto: pone NULL, no borra al alumno)
+    query.exec("UPDATE estudiantes SET id_tutor = NULL");
+
+    // 3. Resetea los contadores (Correcto: pone 0, no borra al profesor)
+    query.exec("UPDATE tutores SET cupo_actual = 0");
+
+    return true;
 }

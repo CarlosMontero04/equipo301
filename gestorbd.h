@@ -19,6 +19,8 @@ public:
     QList<Estudiante> obtenerEstudiantesSinTutor();
     QList<Tutor> obtenerTutoresDisponibles();
     bool confirmarAsignaciones(QMap<int, int> asignaciones);
+    QStringList obtenerListaFacultades();
+    bool reiniciarDatos();
 
 private:
     QSqlDatabase db;

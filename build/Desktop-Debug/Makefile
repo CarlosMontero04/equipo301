@@ -406,7 +406,7 @@ loginwindow.o: ../../loginwindow.cpp ../../loginwindow.h \
 		../../Tutor.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o loginwindow.o ../../loginwindow.cpp
 
-main.o: ../../main.cpp ../../mainwindow.h \
+main.o: ../../main.cpp ../../loginwindow.h \
 		../../gestorbd.h \
 		../../Estudiante.h \
 		../../Tutor.h
@@ -416,7 +416,8 @@ mainwindow.o: ../../mainwindow.cpp ../../mainwindow.h \
 		ui_mainwindow.h \
 		../../gestorbd.h \
 		../../Estudiante.h \
-		../../Tutor.h
+		../../Tutor.h \
+		../../loginwindow.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o mainwindow.o ../../mainwindow.cpp
 
 moc_loginwindow.o: moc_loginwindow.cpp 

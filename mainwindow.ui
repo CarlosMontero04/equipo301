@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>800</width>
-    <height>600</height>
+    <width>825</width>
+    <height>902</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -36,10 +36,10 @@
    <widget class="QTableWidget" name="tablaAsignaciones">
     <property name="geometry">
      <rect>
-      <x>80</x>
-      <y>70</y>
-      <width>631</width>
-      <height>381</height>
+      <x>30</x>
+      <y>280</y>
+      <width>751</width>
+      <height>401</height>
      </rect>
     </property>
     <column>
@@ -61,8 +61,8 @@
    <widget class="QPushButton" name="btnCalcular">
     <property name="geometry">
      <rect>
-      <x>140</x>
-      <y>510</y>
+      <x>120</x>
+      <y>770</y>
       <width>211</width>
       <height>26</height>
      </rect>
@@ -77,8 +77,8 @@
     </property>
     <property name="geometry">
      <rect>
-      <x>430</x>
-      <y>510</y>
+      <x>410</x>
+      <y>770</y>
       <width>201</width>
       <height>26</height>
      </rect>
@@ -100,18 +100,85 @@
      <string>cerrar sesión</string>
     </property>
    </widget>
+   <widget class="QCheckBox" name="chkSoloPrimero">
+    <property name="geometry">
+     <rect>
+      <x>120</x>
+      <y>800</y>
+      <width>231</width>
+      <height>24</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Priorizar/Solo asignar 1º Curso</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="lblResumen">
+    <property name="geometry">
+     <rect>
+      <x>190</x>
+      <y>730</y>
+      <width>491</width>
+      <height>18</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Resumen: Esperando cálculo...</string>
+    </property>
+   </widget>
+   <widget class="QComboBox" name="cmbFacultad">
+    <property name="geometry">
+     <rect>
+      <x>270</x>
+      <y>70</y>
+      <width>331</width>
+      <height>31</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_2">
+    <property name="geometry">
+     <rect>
+      <x>120</x>
+      <y>80</y>
+      <width>161</width>
+      <height>18</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Seleccione Facultad:</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="btnReset">
+    <property name="geometry">
+     <rect>
+      <x>660</x>
+      <y>70</y>
+      <width>88</width>
+      <height>26</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>reset</string>
+    </property>
+   </widget>
    <zorder>tablaAsignaciones</zorder>
    <zorder>label</zorder>
    <zorder>btnCalcular</zorder>
    <zorder>btnConfirmar</zorder>
    <zorder>btnCerrarSesion</zorder>
+   <zorder>chkSoloPrimero</zorder>
+   <zorder>lblResumen</zorder>
+   <zorder>cmbFacultad</zorder>
+   <zorder>label_2</zorder>
+   <zorder>btnReset</zorder>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>800</width>
+     <width>825</width>
      <height>23</height>
     </rect>
    </property>

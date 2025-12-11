@@ -11,6 +11,8 @@
 
 #include <QtCore/QVariant>
 #include <QtWidgets/QApplication>
+#include <QtWidgets/QCheckBox>
+#include <QtWidgets/QComboBox>
 #include <QtWidgets/QHeaderView>
 #include <QtWidgets/QLabel>
 #include <QtWidgets/QMainWindow>
@@ -31,6 +33,11 @@ public:
     QPushButton *btnCalcular;
     QPushButton *btnConfirmar;
     QPushButton *btnCerrarSesion;
+    QCheckBox *chkSoloPrimero;
+    QLabel *lblResumen;
+    QComboBox *cmbFacultad;
+    QLabel *label_2;
+    QPushButton *btnReset;
     QMenuBar *menubar;
     QStatusBar *statusbar;
 
@@ -38,7 +45,7 @@ public:
     {
         if (MainWindow->objectName().isEmpty())
             MainWindow->setObjectName("MainWindow");
-        MainWindow->resize(800, 600);
+        MainWindow->resize(825, 902);
         centralwidget = new QWidget(MainWindow);
         centralwidget->setObjectName("centralwidget");
         label = new QLabel(centralwidget);
@@ -58,26 +65,46 @@ public:
         QTableWidgetItem *__qtablewidgetitem2 = new QTableWidgetItem();
         tablaAsignaciones->setHorizontalHeaderItem(2, __qtablewidgetitem2);
         tablaAsignaciones->setObjectName("tablaAsignaciones");
-        tablaAsignaciones->setGeometry(QRect(80, 70, 631, 381));
+        tablaAsignaciones->setGeometry(QRect(30, 280, 751, 401));
         btnCalcular = new QPushButton(centralwidget);
         btnCalcular->setObjectName("btnCalcular");
-        btnCalcular->setGeometry(QRect(140, 510, 211, 26));
+        btnCalcular->setGeometry(QRect(120, 770, 211, 26));
         btnConfirmar = new QPushButton(centralwidget);
         btnConfirmar->setObjectName("btnConfirmar");
         btnConfirmar->setEnabled(false);
-        btnConfirmar->setGeometry(QRect(430, 510, 201, 26));
+        btnConfirmar->setGeometry(QRect(410, 770, 201, 26));
         btnCerrarSesion = new QPushButton(centralwidget);
         btnCerrarSesion->setObjectName("btnCerrarSesion");
         btnCerrarSesion->setGeometry(QRect(680, 10, 101, 26));
+        chkSoloPrimero = new QCheckBox(centralwidget);
+        chkSoloPrimero->setObjectName("chkSoloPrimero");
+        chkSoloPrimero->setGeometry(QRect(120, 800, 231, 24));
+        lblResumen = new QLabel(centralwidget);
+        lblResumen->setObjectName("lblResumen");
+        lblResumen->setGeometry(QRect(190, 730, 491, 18));
+        cmbFacultad = new QComboBox(centralwidget);
+        cmbFacultad->setObjectName("cmbFacultad");
+        cmbFacultad->setGeometry(QRect(270, 70, 331, 31));
+        label_2 = new QLabel(centralwidget);
+        label_2->setObjectName("label_2");
+        label_2->setGeometry(QRect(120, 80, 161, 18));
+        btnReset = new QPushButton(centralwidget);
+        btnReset->setObjectName("btnReset");
+        btnReset->setGeometry(QRect(660, 70, 88, 26));
         MainWindow->setCentralWidget(centralwidget);
         tablaAsignaciones->raise();
         label->raise();
         btnCalcular->raise();
         btnConfirmar->raise();
         btnCerrarSesion->raise();
+        chkSoloPrimero->raise();
+        lblResumen->raise();
+        cmbFacultad->raise();
+        label_2->raise();
+        btnReset->raise();
         menubar = new QMenuBar(MainWindow);
         menubar->setObjectName("menubar");
-        menubar->setGeometry(QRect(0, 0, 800, 23));
+        menubar->setGeometry(QRect(0, 0, 825, 23));
         MainWindow->setMenuBar(menubar);
         statusbar = new QStatusBar(MainWindow);
         statusbar->setObjectName("statusbar");
@@ -101,6 +128,10 @@ public:
         btnCalcular->setText(QCoreApplication::translate("MainWindow", "CALCULAR ASIGNACI\303\223N", nullptr));
         btnConfirmar->setText(QCoreApplication::translate("MainWindow", "CONFIRMAR Y GUARDAR", nullptr));
         btnCerrarSesion->setText(QCoreApplication::translate("MainWindow", "cerrar sesi\303\263n", nullptr));
+        chkSoloPrimero->setText(QCoreApplication::translate("MainWindow", "Priorizar/Solo asignar 1\302\272 Curso", nullptr));
+        lblResumen->setText(QCoreApplication::translate("MainWindow", "Resumen: Esperando c\303\241lculo...", nullptr));
+        label_2->setText(QCoreApplication::translate("MainWindow", "Seleccione Facultad:", nullptr));
+        btnReset->setText(QCoreApplication::translate("MainWindow", "reset", nullptr));
     } // retranslateUi
 
 };
