@@ -38,6 +38,7 @@ public:
     QComboBox *cmbFacultad;
     QLabel *label_2;
     QPushButton *btnReset;
+    QPushButton *btnVolver;
     QMenuBar *menubar;
     QStatusBar *statusbar;
 
@@ -45,16 +46,19 @@ public:
     {
         if (MainWindow->objectName().isEmpty())
             MainWindow->setObjectName("MainWindow");
-        MainWindow->resize(825, 902);
+        MainWindow->resize(842, 912);
+        QFont font;
+        font.setPointSize(14);
+        MainWindow->setFont(font);
         centralwidget = new QWidget(MainWindow);
         centralwidget->setObjectName("centralwidget");
         label = new QLabel(centralwidget);
         label->setObjectName("label");
         label->setGeometry(QRect(200, 7, 401, 41));
-        QFont font;
-        font.setPointSize(14);
-        font.setBold(true);
-        label->setFont(font);
+        QFont font1;
+        font1.setPointSize(14);
+        font1.setBold(true);
+        label->setFont(font1);
         tablaAsignaciones = new QTableWidget(centralwidget);
         if (tablaAsignaciones->columnCount() < 3)
             tablaAsignaciones->setColumnCount(3);
@@ -91,6 +95,12 @@ public:
         btnReset = new QPushButton(centralwidget);
         btnReset->setObjectName("btnReset");
         btnReset->setGeometry(QRect(660, 70, 88, 26));
+        btnVolver = new QPushButton(centralwidget);
+        btnVolver->setObjectName("btnVolver");
+        btnVolver->setGeometry(QRect(10, 830, 111, 26));
+        QFont font2;
+        font2.setPointSize(11);
+        btnVolver->setFont(font2);
         MainWindow->setCentralWidget(centralwidget);
         tablaAsignaciones->raise();
         label->raise();
@@ -102,9 +112,10 @@ public:
         cmbFacultad->raise();
         label_2->raise();
         btnReset->raise();
+        btnVolver->raise();
         menubar = new QMenuBar(MainWindow);
         menubar->setObjectName("menubar");
-        menubar->setGeometry(QRect(0, 0, 825, 23));
+        menubar->setGeometry(QRect(0, 0, 842, 28));
         MainWindow->setMenuBar(menubar);
         statusbar = new QStatusBar(MainWindow);
         statusbar->setObjectName("statusbar");
@@ -132,6 +143,7 @@ public:
         lblResumen->setText(QCoreApplication::translate("MainWindow", "Resumen: Esperando c\303\241lculo...", nullptr));
         label_2->setText(QCoreApplication::translate("MainWindow", "Seleccione Facultad:", nullptr));
         btnReset->setText(QCoreApplication::translate("MainWindow", "reset", nullptr));
+        btnVolver->setText(QCoreApplication::translate("MainWindow", "Volver atras", nullptr));
     } // retranslateUi
 
 };

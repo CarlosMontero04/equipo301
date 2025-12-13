@@ -26,6 +26,9 @@ private slots:
 
     void on_btnReset_clicked();
 
+
+    void on_btnVolver_clicked();
+
 private:
     Ui::MainWindow *ui;
 };

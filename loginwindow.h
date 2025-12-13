@@ -2,6 +2,8 @@
 #define LOGINWINDOW_H
 
 #include <QDialog>
+#include "tutorwindow.h"
+#include "menucoordinador.h"
 
 namespace Ui {
 class LoginWindow;

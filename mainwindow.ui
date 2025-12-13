@@ -6,9 +6,14 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>825</width>
-    <height>902</height>
+    <width>842</width>
+    <height>912</height>
    </rect>
+  </property>
+  <property name="font">
+   <font>
+    <pointsize>14</pointsize>
+   </font>
   </property>
   <property name="windowTitle">
    <string>MainWindow</string>
@@ -162,6 +167,24 @@
      <string>reset</string>
     </property>
    </widget>
+   <widget class="QPushButton" name="btnVolver">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>830</y>
+      <width>111</width>
+      <height>26</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>11</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string>Volver atras</string>
+    </property>
+   </widget>
    <zorder>tablaAsignaciones</zorder>
    <zorder>label</zorder>
    <zorder>btnCalcular</zorder>
@@ -172,14 +195,15 @@
    <zorder>cmbFacultad</zorder>
    <zorder>label_2</zorder>
    <zorder>btnReset</zorder>
+   <zorder>btnVolver</zorder>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>825</width>
-     <height>23</height>
+     <width>842</width>
+     <height>28</height>
     </rect>
    </property>
   </widget>

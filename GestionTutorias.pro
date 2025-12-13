@@ -12,18 +12,27 @@ SOURCES += \
     gestorbd.cpp \
     loginwindow.cpp \
     main.cpp \
-    mainwindow.cpp
+    mainwindow.cpp \
+    menucoordinador.cpp \
+    tutorwindow.cpp \
+    ventanaalertas.cpp
 
 HEADERS += \
     Estudiante.h \
     Tutor.h \
     gestorbd.h \
     loginwindow.h \
-    mainwindow.h
+    mainwindow.h \
+    menucoordinador.h \
+    tutorwindow.h \
+    ventanaalertas.h
 
 FORMS += \
     loginwindow.ui \
-    mainwindow.ui
+    mainwindow.ui \
+    menucoordinador.ui \
+    tutorwindow.ui \
+    ventanaalertas.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

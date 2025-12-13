@@ -4,6 +4,7 @@
 #include "gestorbd.h"   // Para conectar a la BD
 #include <QMessageBox>
 #include <QSqlQuery>
+#include "tutorwindow.h"
 
 LoginWindow::LoginWindow(QWidget *parent) :
     QDialog(parent),
@@ -49,14 +50,15 @@ void LoginWindow::on_btnLogin_clicked()
     query.bindValue(":p", pass);
 
     if (query.exec() && query.next()) {
-        // ¡Es Coordinador! -> Abrimos tu ventana de Asignaciones
-        this->hide(); // Ocultamos el login
+        // ¡Es Coordinador!
+        this->hide(); // Ocultamos login
 
-        MainWindow *w = new MainWindow(this);
-        w->setAttribute(Qt::WA_DeleteOnClose); // Liberar memoria al cerrar
-        w->show();
+        // ABRIMOS EL MENÚ QUE ACABAS DE CREAR
+        MenuCoordinador *menu = new MenuCoordinador(this);
+        menu->setAttribute(Qt::WA_DeleteOnClose);
+        menu->show();
 
-        gestor.cerrar();
+        //gestor.cerrar();-> borrado para la bbdd
         return;
     }
 
@@ -68,14 +70,20 @@ void LoginWindow::on_btnLogin_clicked()
     query.bindValue(":p", pass);
 
     if (query.exec() && query.next()) {
-        // ¡Es Tutor!
-        QString nombre = query.value("nombre").toString();
-        QMessageBox::information(this, "Acceso Tutor", "Bienvenido/a, " + nombre + ".\n(Aquí se abrirá el módulo de Alertas)");
+        // 1. Guardamos el ID del tutor para usarlo luego
+        int idTutor = query.value("id").toInt();
+        QString nombreTutor = query.value("nombre").toString();
 
-        // AQUÍ ABRIRÍAS LA VENTANA DE ALERTAS DE TU COMPAÑERO
-        // Ejemplo: AlertaWindow *aw = new AlertaWindow(this); aw->show();
+        // 2. Ocultamos el login
+        this->hide();
 
-        gestor.cerrar();
+        // 3. Abrimos la ventana del Tutor
+        TutorWindow *ventana = new TutorWindow(idTutor, this);
+        ventana->setAttribute(Qt::WA_DeleteOnClose);
+        ventana->setWindowTitle("Bienvenido, " + nombreTutor);
+        ventana->show();
+
+        //gestor.cerrar();
         return;
     }
 

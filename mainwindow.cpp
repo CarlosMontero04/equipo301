@@ -7,6 +7,9 @@
 #include <QHeaderView>
 #include "loginwindow.h"
 #include <QDebug>
+#include <QInputDialog> // <--- Revisa que tengas este
+#include <QSqlQuery>
+#include <QSqlError>
 
 
 MainWindow::MainWindow(QWidget *parent)
@@ -14,13 +17,15 @@ MainWindow::MainWindow(QWidget *parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-    ui->tablaAsignaciones->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
 
-    // --- CÓDIGO NUEVO: Cargar las facultades en el desplegable ---
+    //CÓDIGO DE TU COMPAÑERO (Asignaciones) ---
+    ui->tablaAsignaciones->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
     GestorBD gestor;
     QStringList facultades = gestor.obtenerListaFacultades();
     ui->cmbFacultad->addItems(facultades);
+
 }
+
 
 MainWindow::~MainWindow()
 {
@@ -185,5 +190,12 @@ void MainWindow::on_btnReset_clicked()
             QMessageBox::critical(this, "Error", "No se pudieron reiniciar los datos.");
         }
     }
+}
+
+
+
+void MainWindow::on_btnVolver_clicked()
+{
+    this->close(); // Cierra la ventana actual (y dispara la señal de "terminado")
 }
 
