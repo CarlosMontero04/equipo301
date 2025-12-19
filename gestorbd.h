@@ -21,6 +21,11 @@ public:
     bool confirmarAsignaciones(QMap<int, int> asignaciones);
     QStringList obtenerListaFacultades();
     bool reiniciarDatos();
+    bool enviarMensaje(int idEmisor, QString rolEmisor, int idReceptor, QString rolReceptor, QString contenido);
+    QList<QPair<QString, QString>> obtenerConversacion(int idEmisor, QString rolEmisor, int idReceptor, QString rolReceptor);
+
+    QString obtenerNombreTutor(int idEstudiante);
+    int obtenerIdTutorDeEstudiante(int idEstudiante); // Solo una declaración aquí
 
 private:
     QSqlDatabase db;

@@ -15,39 +15,65 @@
 #include <QtWidgets/QLabel>
 #include <QtWidgets/QLineEdit>
 #include <QtWidgets/QPushButton>
+#include <QtWidgets/QSpacerItem>
+#include <QtWidgets/QVBoxLayout>
 
 QT_BEGIN_NAMESPACE
 
 class Ui_LoginWindow
 {
 public:
+    QVBoxLayout *verticalLayout;
     QLabel *label;
     QLineEdit *txtUsuario;
     QLabel *label_2;
     QLineEdit *txtPassword;
+    QSpacerItem *verticalSpacer_2;
     QPushButton *btnLogin;
+    QPushButton *btnSalir;
 
     void setupUi(QDialog *LoginWindow)
     {
         if (LoginWindow->objectName().isEmpty())
             LoginWindow->setObjectName("LoginWindow");
         LoginWindow->resize(730, 500);
+        verticalLayout = new QVBoxLayout(LoginWindow);
+        verticalLayout->setObjectName("verticalLayout");
         label = new QLabel(LoginWindow);
         label->setObjectName("label");
-        label->setGeometry(QRect(220, 140, 91, 18));
+
+        verticalLayout->addWidget(label);
+
         txtUsuario = new QLineEdit(LoginWindow);
         txtUsuario->setObjectName("txtUsuario");
-        txtUsuario->setGeometry(QRect(220, 160, 281, 26));
+
+        verticalLayout->addWidget(txtUsuario);
+
         label_2 = new QLabel(LoginWindow);
         label_2->setObjectName("label_2");
-        label_2->setGeometry(QRect(220, 200, 101, 18));
+
+        verticalLayout->addWidget(label_2);
+
         txtPassword = new QLineEdit(LoginWindow);
         txtPassword->setObjectName("txtPassword");
-        txtPassword->setGeometry(QRect(220, 220, 281, 26));
         txtPassword->setEchoMode(QLineEdit::Password);
+
+        verticalLayout->addWidget(txtPassword);
+
+        verticalSpacer_2 = new QSpacerItem(20, 303, QSizePolicy::Minimum, QSizePolicy::Expanding);
+
+        verticalLayout->addItem(verticalSpacer_2);
+
         btnLogin = new QPushButton(LoginWindow);
         btnLogin->setObjectName("btnLogin");
-        btnLogin->setGeometry(QRect(310, 280, 88, 26));
+
+        verticalLayout->addWidget(btnLogin);
+
+        btnSalir = new QPushButton(LoginWindow);
+        btnSalir->setObjectName("btnSalir");
+
+        verticalLayout->addWidget(btnSalir);
+
 
         retranslateUi(LoginWindow);
 
@@ -60,6 +86,7 @@ public:
         label->setText(QCoreApplication::translate("LoginWindow", "E-mail uco", nullptr));
         label_2->setText(QCoreApplication::translate("LoginWindow", "Contrase\303\261a", nullptr));
         btnLogin->setText(QCoreApplication::translate("LoginWindow", "Entrar", nullptr));
+        btnSalir->setText(QCoreApplication::translate("LoginWindow", "Salir", nullptr));
     } // retranslateUi
 
 };

@@ -15,38 +15,68 @@
 #include <QtWidgets/QDialog>
 #include <QtWidgets/QLabel>
 #include <QtWidgets/QPushButton>
+#include <QtWidgets/QSpacerItem>
+#include <QtWidgets/QVBoxLayout>
 
 QT_BEGIN_NAMESPACE
 
 class Ui_TutorWindow
 {
 public:
+    QVBoxLayout *verticalLayout;
     QLabel *label;
-    QComboBox *comboAlumnos;
-    QPushButton *bntEmitirAlerta;
     QLabel *label_2;
+    QComboBox *comboAlumnos;
+    QSpacerItem *verticalSpacer;
+    QPushButton *btnContactar;
+    QPushButton *bntEmitirAlerta;
+    QPushButton *btnCerrarSesion;
 
     void setupUi(QDialog *TutorWindow)
     {
         if (TutorWindow->objectName().isEmpty())
             TutorWindow->setObjectName("TutorWindow");
         TutorWindow->resize(504, 363);
+        verticalLayout = new QVBoxLayout(TutorWindow);
+        verticalLayout->setObjectName("verticalLayout");
         label = new QLabel(TutorWindow);
         label->setObjectName("label");
-        label->setGeometry(QRect(190, 50, 141, 18));
         QFont font;
         font.setPointSize(14);
         font.setBold(true);
         label->setFont(font);
-        comboAlumnos = new QComboBox(TutorWindow);
-        comboAlumnos->setObjectName("comboAlumnos");
-        comboAlumnos->setGeometry(QRect(220, 160, 86, 26));
-        bntEmitirAlerta = new QPushButton(TutorWindow);
-        bntEmitirAlerta->setObjectName("bntEmitirAlerta");
-        bntEmitirAlerta->setGeometry(QRect(220, 260, 91, 26));
+
+        verticalLayout->addWidget(label);
+
         label_2 = new QLabel(TutorWindow);
         label_2->setObjectName("label_2");
-        label_2->setGeometry(QRect(100, 160, 101, 18));
+
+        verticalLayout->addWidget(label_2);
+
+        comboAlumnos = new QComboBox(TutorWindow);
+        comboAlumnos->setObjectName("comboAlumnos");
+
+        verticalLayout->addWidget(comboAlumnos);
+
+        verticalSpacer = new QSpacerItem(20, 161, QSizePolicy::Minimum, QSizePolicy::Expanding);
+
+        verticalLayout->addItem(verticalSpacer);
+
+        btnContactar = new QPushButton(TutorWindow);
+        btnContactar->setObjectName("btnContactar");
+
+        verticalLayout->addWidget(btnContactar);
+
+        bntEmitirAlerta = new QPushButton(TutorWindow);
+        bntEmitirAlerta->setObjectName("bntEmitirAlerta");
+
+        verticalLayout->addWidget(bntEmitirAlerta);
+
+        btnCerrarSesion = new QPushButton(TutorWindow);
+        btnCerrarSesion->setObjectName("btnCerrarSesion");
+
+        verticalLayout->addWidget(btnCerrarSesion);
+
 
         retranslateUi(TutorWindow);
 
@@ -57,8 +87,10 @@ public:
     {
         TutorWindow->setWindowTitle(QCoreApplication::translate("TutorWindow", "Dialog", nullptr));
         label->setText(QCoreApplication::translate("TutorWindow", "Panel del Tutor", nullptr));
-        bntEmitirAlerta->setText(QCoreApplication::translate("TutorWindow", "Emitir Alerta", nullptr));
         label_2->setText(QCoreApplication::translate("TutorWindow", "Elegir alumno:", nullptr));
+        btnContactar->setText(QCoreApplication::translate("TutorWindow", "Contactar Alumno", nullptr));
+        bntEmitirAlerta->setText(QCoreApplication::translate("TutorWindow", "Emitir Alerta", nullptr));
+        btnCerrarSesion->setText(QCoreApplication::translate("TutorWindow", "Cerrar Sesi\303\263n", nullptr));
     } // retranslateUi
 
 };

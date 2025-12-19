@@ -9,18 +9,17 @@
 #include <QComboBox>
 #include <QDialogButtonBox>
 #include <QTextEdit>
+#include "loginwindow.h"
 
-// 1. Constructor: Aquí recibimos el ID y lo guardamos
 TutorWindow::TutorWindow(int idTutor, QWidget *parent) :
     QDialog(parent),
     ui(new Ui::TutorWindow),
-    idTutorLogueado(idTutor) // Guardamos el ID en nuestra variable
+    idTutorLogueado(idTutor)
 {
     ui->setupUi(this);
+    chatWindow = nullptr; // <--- Inicializamos el puntero a nulo
 
-    // --- CÓDIGO NUEVO: CARGAR ALUMNOS ---
     QSqlQuery query;
-    // Buscamos alumnos que tengan asignado ESTE tutor (id_tutor = idTutorLogueado)
     query.prepare("SELECT id, nombre FROM estudiantes WHERE id_tutor = :id");
     query.bindValue(":id", idTutorLogueado);
 
@@ -28,8 +27,7 @@ TutorWindow::TutorWindow(int idTutor, QWidget *parent) :
         while (query.next()) {
             QString nombre = query.value("nombre").toString();
             int idAlumno = query.value("id").toInt();
-
-            // Truco: Añadimos el nombre visible, pero guardamos el ID oculto
+            // Aquí guardamos el ID oculto (UserRole)
             ui->comboAlumnos->addItem(nombre, idAlumno);
         }
     } else {
@@ -37,24 +35,48 @@ TutorWindow::TutorWindow(int idTutor, QWidget *parent) :
     }
 }
 
-// 2. Destructor: Limpieza de memoria
 TutorWindow::~TutorWindow()
 {
     delete ui;
+    // Si la ventana de chat está abierta al cerrar esta, la borramos para liberar memoria
+    if(chatWindow) delete chatWindow;
+}
+
+// --- NUEVA FUNCIÓN PARA ABRIR EL CHAT ---
+void TutorWindow::on_btnContactar_clicked()
+{
+    // 1. Verificar si hay un alumno seleccionado en el desplegable
+    if (ui->comboAlumnos->currentIndex() == -1) {
+        QMessageBox::warning(this, "Aviso", "Por favor, selecciona un alumno de la lista primero.");
+        return;
+    }
+
+    // 2. Recuperar los datos del alumno seleccionado
+    // currentText() nos da el nombre visible
+    QString nombreAlumno = ui->comboAlumnos->currentText();
+    // currentData() nos da el ID oculto que guardamos en el constructor
+    int idAlumno = ui->comboAlumnos->currentData().toInt();
+
+    // 3. Crear y mostrar el chat
+    // Si ya había una ventana abierta, la cerramos y creamos una nueva
+    if (chatWindow) {
+        delete chatWindow;
+    }
+
+    // Constructor: (miId, miRol, otroId, otroRol, nombreOtro, parent)
+    chatWindow = new ChatWindow(idTutorLogueado, "Tutor", idAlumno, "Estudiante", nombreAlumno, this);
+    chatWindow->show();
 }
 
 void TutorWindow::on_bntEmitirAlerta_clicked()
 {
-    // 1. Verificar si hay alumnos cargados
     if (ui->comboAlumnos->currentIndex() == -1) {
         QMessageBox::warning(this, "Aviso", "No tienes alumnos asignados para emitir alertas.");
         return;
     }
 
-    // 2. Recuperar el ID del alumno seleccionado (el dato oculto)
     int idEstudiante = ui->comboAlumnos->currentData().toInt();
 
-    // 3. Crear el formulario emergente (Tipo y Descripción)
     QDialog dialogo(this);
     dialogo.setWindowTitle("Nueva Alerta de Riesgo");
     QFormLayout form(&dialogo);
@@ -72,7 +94,6 @@ void TutorWindow::on_bntEmitirAlerta_clicked()
     connect(&buttonBox, SIGNAL(accepted()), &dialogo, SLOT(accept()));
     connect(&buttonBox, SIGNAL(rejected()), &dialogo, SLOT(reject()));
 
-    // 4. Si el usuario pulsa OK, guardamos en la BD
     if (dialogo.exec() == QDialog::Accepted) {
         QString tipo = comboTipo->currentText();
         QString desc = txtDescripcion->toPlainText();
@@ -83,7 +104,6 @@ void TutorWindow::on_bntEmitirAlerta_clicked()
         }
 
         QSqlQuery query;
-        // Insertamos usando los nombres de tu tabla 'alertas'
         query.prepare("INSERT INTO alertas (id_estudiante, id_tutor, tipo_riesgo, descripcion, fecha, estado) "
                       "VALUES (:est, :tut, :tipo, :desc, NOW(), 'Pendiente')");
 
@@ -100,3 +120,20 @@ void TutorWindow::on_bntEmitirAlerta_clicked()
     }
 }
 
+void TutorWindow::on_btnCerrarSesion_clicked()
+{
+    // 1. Guardar estado actual del Tutor (ej. si está maximizada)
+    Qt::WindowStates estadoActual = this->windowState();
+
+    // 2. Cerrar ventana Tutor
+    this->close();
+
+    // 3. Crear Login
+    LoginWindow *login = new LoginWindow();
+
+    // 4. Aplicar el estado guardado al Login
+    login->setWindowState(estadoActual);
+
+    // 5. Mostrar
+    login->show();
+}

@@ -3,15 +3,22 @@
 GestorBD::GestorBD() {}
 
 bool GestorBD::conectar() {
-    db = QSqlDatabase::addDatabase("QMARIADB");
-    db.setHostName("localhost");
-    db.setDatabaseName("gestion_tutorias");
-    db.setUserName("admin");
-    db.setPassword("pepe");
+    // Si ya existe una conexión con este nombre, la usamos
+    if(QSqlDatabase::contains("qt_sql_default_connection")) {
+        db = QSqlDatabase::database("qt_sql_default_connection");
+    } else {
+        db = QSqlDatabase::addDatabase("QMARIADB");
+        db.setHostName("localhost");
+        db.setDatabaseName("gestion_tutorias");
+        db.setUserName("admin");
+        db.setPassword("pepe");
+    }
 
-    if (!db.open()) {
-        qDebug() << "ERROR CONEXION:" << db.lastError().text();
-        return false;
+    if (!db.isOpen()) {
+        if (!db.open()) {
+            qDebug() << "ERROR CONEXION:" << db.lastError().text();
+            return false;
+        }
     }
     qDebug() << "Conexion Exitosa con la BD";
     return true;
@@ -26,8 +33,6 @@ QList<Estudiante> GestorBD::obtenerEstudiantesSinTutor() {
     if (!db.isOpen()) conectar();
 
     QSqlQuery query;
-
-    // MEJORA H2: Ordenamos por 'curso ASC' (1º primero) y luego nombre
     query.prepare("SELECT id, nombre, titulacion, curso, promedio FROM estudiantes WHERE id_tutor IS NULL ORDER BY curso ASC, nombre ASC");
 
     if (query.exec()) {
@@ -36,7 +41,7 @@ QList<Estudiante> GestorBD::obtenerEstudiantesSinTutor() {
                 query.value("id").toInt(),
                 query.value("nombre").toString(),
                 query.value("titulacion").toString(),
-                query.value("curso").toInt(), // <--- Leemos el curso
+                query.value("curso").toInt(),
                 query.value("promedio").toDouble()
                 ));
         }
@@ -46,34 +51,25 @@ QList<Estudiante> GestorBD::obtenerEstudiantesSinTutor() {
 
 QList<Tutor> GestorBD::obtenerTutoresDisponibles() {
     QList<Tutor> lista;
-    // Usamos la conexión inteligente que arreglamos antes
-    if (QSqlDatabase::contains("qt_sql_default_connection")) {
-        db = QSqlDatabase::database("qt_sql_default_connection");
-    } else {
-        conectar();
-    }
+    if (!db.isOpen()) conectar();
 
-    if (!db.isOpen()) return lista;
-
-    // --- AQUÍ ESTABA EL ERROR PROBABLE ---
-    // Es vital que seleccionemos 'departamento' para poder comparar facultades
     QSqlQuery query("SELECT id, nombre, departamento, cupo_maximo, cupo_actual FROM tutores");
 
     while (query.next()) {
         lista.append(Tutor(
             query.value("id").toInt(),
             query.value("nombre").toString(),
-            query.value("departamento").toString(), // <--- IMPORTANTE: Leer el departamento
+            query.value("departamento").toString(),
             query.value("cupo_maximo").toInt(),
             query.value("cupo_actual").toInt()
             ));
     }
     return lista;
 }
+
 bool GestorBD::confirmarAsignaciones(QMap<int, int> asignaciones) {
     if (!db.isOpen()) conectar();
 
-    // INICIAR TRANSACCIÓN (Paso crítico para seguridad de datos)
     if (!db.transaction()) {
         qDebug() << "Error al iniciar transacción";
         return false;
@@ -83,51 +79,45 @@ bool GestorBD::confirmarAsignaciones(QMap<int, int> asignaciones) {
     QSqlQuery queryUpdate;
     bool error = false;
 
-    // Recorremos el mapa (Key = ID Estudiante, Value = ID Tutor)
     QMapIterator<int, int> i(asignaciones);
     while (i.hasNext()) {
         i.next();
         int idEst = i.key();
         int idTut = i.value();
 
-        // 1. Guardar en Histórico (Tabla asignaciones) - Requisito RI-3
         queryInsert.prepare("INSERT INTO asignaciones (id_estudiante, id_tutor, fecha_inicio, estado, curso_academico) "
                             "VALUES (:est, :tut, NOW(), 'Activa', '2024-2025')");
         queryInsert.bindValue(":est", idEst);
         queryInsert.bindValue(":tut", idTut);
 
         if (!queryInsert.exec()) {
-            qDebug() << "Error insertando asignación:" << queryInsert.lastError().text();
             error = true;
             break;
         }
 
-        // 2. Actualizar Estudiante (Tabla estudiantes) - Para que ya no salga como "pendiente"
         queryUpdate.prepare("UPDATE estudiantes SET id_tutor = :tut WHERE id = :est");
         queryUpdate.bindValue(":tut", idTut);
         queryUpdate.bindValue(":est", idEst);
 
         if (!queryUpdate.exec()) {
-            qDebug() << "Error actualizando estudiante:" << queryUpdate.lastError().text();
             error = true;
             break;
         }
     }
 
     if (error) {
-        db.rollback(); // Si algo falló, deshacemos TODO
+        db.rollback();
         return false;
     } else {
-        return db.commit(); // Si todo fue bien, guardamos definitivamente
+        return db.commit();
     }
 }
+
 QStringList GestorBD::obtenerListaFacultades() {
     QStringList lista;
     if (!db.isOpen()) conectar();
 
     QSqlQuery query("SELECT DISTINCT titulacion FROM estudiantes ORDER BY titulacion ASC");
-
-    // Añadimos una opción por defecto para "Hacerlo todo"
     lista.append("--- TODAS LAS FACULTADES ---");
 
     while (query.next()) {
@@ -135,16 +125,90 @@ QStringList GestorBD::obtenerListaFacultades() {
     }
     return lista;
 }
+
 bool GestorBD::reiniciarDatos() {
+    if (!db.isOpen()) conectar();
     QSqlQuery query;
-    // 1. Borra el historial de uniones (Correcto)
-    query.exec("DELETE FROM asignaciones");
+    bool b1 = query.exec("DELETE FROM asignaciones");
+    bool b2 = query.exec("UPDATE estudiantes SET id_tutor = NULL");
+    bool b3 = query.exec("UPDATE tutores SET cupo_actual = 0");
+    return b1 && b2 && b3;
+}
 
-    // 2. Libera a los alumnos (Correcto: pone NULL, no borra al alumno)
-    query.exec("UPDATE estudiantes SET id_tutor = NULL");
+bool GestorBD::enviarMensaje(int idEmisor, QString rolEmisor, int idReceptor, QString rolReceptor, QString contenido) {
+    if (!db.isOpen()) conectar();
 
-    // 3. Resetea los contadores (Correcto: pone 0, no borra al profesor)
-    query.exec("UPDATE tutores SET cupo_actual = 0");
+    QSqlQuery query;
+    query.prepare("INSERT INTO mensajes (id_emisor, rol_emisor, id_receptor, rol_receptor, contenido, fecha, leido) "
+                  "VALUES (:emi, :rolE, :rec, :rolR, :cont, NOW(), 0)");
 
-    return true;
+    query.bindValue(":emi", idEmisor);
+    query.bindValue(":rolE", rolEmisor);
+    query.bindValue(":rec", idReceptor);
+    query.bindValue(":rolR", rolReceptor);
+    query.bindValue(":cont", contenido);
+
+    if(query.exec()){
+        return true;
+    } else {
+        qDebug() << "Error enviando mensaje:" << query.lastError().text();
+        return false;
+    }
+}
+
+QList<QPair<QString, QString>> GestorBD::obtenerConversacion(int idA, QString rolA, int idB, QString rolB) {
+    QList<QPair<QString, QString>> charla;
+    if (!db.isOpen()) conectar();
+
+    QSqlQuery query;
+    QString sql = "SELECT rol_emisor, contenido FROM mensajes WHERE "
+                  "((id_emisor = :idA AND rol_emisor = :rolA) AND (id_receptor = :idB AND rol_receptor = :rolB)) "
+                  "OR "
+                  "((id_emisor = :idB AND rol_emisor = :rolB) AND (id_receptor = :idA AND rol_receptor = :rolA)) "
+                  "ORDER BY fecha ASC";
+
+    query.prepare(sql);
+    query.bindValue(":idA", idA);
+    query.bindValue(":rolA", rolA);
+    query.bindValue(":idB", idB);
+    query.bindValue(":rolB", rolB);
+
+    if (query.exec()) {
+        while(query.next()){
+            QString emisor = query.value("rol_emisor").toString();
+            QString texto = query.value("contenido").toString();
+            charla.append(qMakePair(emisor, texto));
+        }
+    } else {
+        qDebug() << "Error cargando chat:" << query.lastError().text();
+    }
+    return charla;
+}
+
+QString GestorBD::obtenerNombreTutor(int idEstudiante) {
+    if (!db.isOpen()) conectar();
+    QSqlQuery query;
+    query.prepare("SELECT t.nombre FROM tutores t "
+                  "JOIN estudiantes e ON t.id = e.id_tutor "
+                  "WHERE e.id = :id");
+    query.bindValue(":id", idEstudiante);
+
+    if (query.exec() && query.next()) {
+        return query.value(0).toString();
+    }
+    return "Sin tutor asignado";
+}
+
+int GestorBD::obtenerIdTutorDeEstudiante(int idEstudiante) {
+    if (!db.isOpen()) conectar();
+    QSqlQuery query;
+    query.prepare("SELECT id_tutor FROM estudiantes WHERE id = :id");
+    query.bindValue(":id", idEstudiante);
+
+    if (query.exec() && query.next()) {
+        // Verifica si es nulo
+        if(query.value(0).isNull()) return -1;
+        return query.value(0).toInt();
+    }
+    return -1;
 }

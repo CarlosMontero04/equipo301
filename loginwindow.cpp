@@ -1,10 +1,15 @@
 #include "loginwindow.h"
 #include "ui_loginwindow.h"
-#include "mainwindow.h" // Para abrir la ventana del Coordinador
-#include "gestorbd.h"   // Para conectar a la BD
+#include "mainwindow.h"      // Se mantiene por compatibilidad si lo usabas
+#include "menucoordinador.h" // <--- NECESARIO para abrir el menú de coordinador
+#include "gestorbd.h"
+#include "tutorwindow.h"
+#include "menuestudiante.h"
+
 #include <QMessageBox>
 #include <QSqlQuery>
-#include "tutorwindow.h"
+#include <QSqlError>
+#include <QApplication> // <--- NECESARIO para cerrar la aplicación con quit()
 
 LoginWindow::LoginWindow(QWidget *parent) :
     QDialog(parent),
@@ -12,7 +17,7 @@ LoginWindow::LoginWindow(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    // Opcional: Poner el foco en el campo de usuario al iniciar
+    // Poner el foco en el campo de usuario al iniciar para escribir directo
     ui->txtUsuario->setFocus();
 }
 
@@ -21,7 +26,15 @@ LoginWindow::~LoginWindow()
     delete ui;
 }
 
-// Esta función se ejecuta al pulsar el botón "Entrar" (btnLogin)
+// --- NUEVO: FUNCION DEL BOTÓN SALIR ---
+// Asegúrate de que en tu .ui el botón se llame "btnSalir"
+void LoginWindow::on_btnSalir_clicked()
+{
+    // Cierra la aplicación completamente
+    QApplication::quit();
+}
+
+// --- LOGICA DE INICIO DE SESIÓN ---
 void LoginWindow::on_btnLogin_clicked()
 {
     QString usuario = ui->txtUsuario->text();
@@ -42,6 +55,9 @@ void LoginWindow::on_btnLogin_clicked()
 
     QSqlQuery query;
 
+    // --- TRUCO: Guardamos si la ventana está maximizada o normal ---
+    Qt::WindowStates estadoVentana = this->windowState();
+
     // ---------------------------------------------------------
     // NIVEL 1: ¿ES COORDINADOR? (Tabla 'coordinadores')
     // ---------------------------------------------------------
@@ -50,15 +66,17 @@ void LoginWindow::on_btnLogin_clicked()
     query.bindValue(":p", pass);
 
     if (query.exec() && query.next()) {
-        // ¡Es Coordinador!
-        this->hide(); // Ocultamos login
+        // Ocultamos el login
+        this->hide();
 
-        // ABRIMOS EL MENÚ QUE ACABAS DE CREAR
-        MenuCoordinador *menu = new MenuCoordinador(this);
-        menu->setAttribute(Qt::WA_DeleteOnClose);
+        // Abrimos el Menú de Coordinador
+        MenuCoordinador *menu = new MenuCoordinador(this); // Pasamos 'this' como padre o nullptr
+        menu->setAttribute(Qt::WA_DeleteOnClose); // Liberar memoria al cerrar
+
+        // APLICAMOS EL ESTADO VISUAL (Si login estaba maximizado, este también)
+        menu->setWindowState(estadoVentana);
+
         menu->show();
-
-        //gestor.cerrar();-> borrado para la bbdd
         return;
     }
 
@@ -70,38 +88,43 @@ void LoginWindow::on_btnLogin_clicked()
     query.bindValue(":p", pass);
 
     if (query.exec() && query.next()) {
-        // 1. Guardamos el ID del tutor para usarlo luego
         int idTutor = query.value("id").toInt();
         QString nombreTutor = query.value("nombre").toString();
 
-        // 2. Ocultamos el login
         this->hide();
 
-        // 3. Abrimos la ventana del Tutor
+        // Abrimos ventana Tutor
         TutorWindow *ventana = new TutorWindow(idTutor, this);
         ventana->setAttribute(Qt::WA_DeleteOnClose);
         ventana->setWindowTitle("Bienvenido, " + nombreTutor);
-        ventana->show();
 
-        //gestor.cerrar();
+        // APLICAMOS EL ESTADO VISUAL
+        ventana->setWindowState(estadoVentana);
+
+        ventana->show();
         return;
     }
 
     // ---------------------------------------------------------
     // NIVEL 3: ¿ES ESTUDIANTE? (Tabla 'estudiantes')
     // ---------------------------------------------------------
-    query.prepare("SELECT id, nombre FROM estudiantes WHERE email_uco = :u AND password = :p");
+    query.prepare("SELECT id FROM estudiantes WHERE email_uco = :u AND password = :p");
     query.bindValue(":u", usuario);
     query.bindValue(":p", pass);
 
     if (query.exec() && query.next()) {
-        // ¡Es Estudiante!
-        QString nombre = query.value("nombre").toString();
-        QMessageBox::information(this, "Acceso Estudiante", "Hola, " + nombre + ".\n(Aquí se abrirá el Chat)");
+        int idEstudiante = query.value("id").toInt();
 
-        // AQUÍ ABRIRÍAS LA VENTANA DE CHAT DE TU COMPAÑERO
+        this->hide();
 
-        gestor.cerrar();
+        // Abrimos Menú Estudiante
+        MenuEstudiante *menu = new MenuEstudiante(idEstudiante); // Asumiendo constructor con ID
+        menu->setAttribute(Qt::WA_DeleteOnClose);
+
+        // APLICAMOS EL ESTADO VISUAL
+        menu->setWindowState(estadoVentana);
+
+        menu->show();
         return;
     }
 
@@ -109,5 +132,7 @@ void LoginWindow::on_btnLogin_clicked()
     // SI LLEGA AQUÍ -> NO SE ENCONTRÓ EL USUARIO
     // ---------------------------------------------------------
     QMessageBox::warning(this, "Acceso Denegado", "El usuario o la contraseña son incorrectos.");
+
+    // Cerramos la conexión si falló el login (opcional, GestorBD suele manejarlo en su destructor)
     gestor.cerrar();
 }

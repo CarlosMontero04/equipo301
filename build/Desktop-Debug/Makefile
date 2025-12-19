@@ -37,7 +37,7 @@ MOVE          = mv -f
 TAR           = tar -cf
 COMPRESS      = gzip -9f
 DISTNAME      = GestionTutorias1.0.0
-DISTDIR = /home/pepe/Escritorio/equipo301/build/Desktop-Debug/.tmp/GestionTutorias1.0.0
+DISTDIR = /home/matas/universidad/cuarto/primer\ cuatri/is/programa_tutorias_uco/equipo301/build/Desktop-Debug/.tmp/GestionTutorias1.0.0
 LINK          = g++
 LFLAGS        = -Wl,-rpath-link,/usr/lib/x86_64-linux-gnu
 LIBS          = $(SUBLIBS) /usr/lib/x86_64-linux-gnu/libQt6Widgets.so /usr/lib/x86_64-linux-gnu/libQt6Gui.so /usr/lib/x86_64-linux-gnu/libGLX.so /usr/lib/x86_64-linux-gnu/libOpenGL.so /usr/lib/x86_64-linux-gnu/libQt6Sql.so /usr/lib/x86_64-linux-gnu/libQt6Core.so -lpthread -lGLX -lOpenGL   
@@ -52,27 +52,35 @@ OBJECTS_DIR   = ./
 
 ####### Files
 
-SOURCES       = ../../gestorbd.cpp \
+SOURCES       = ../../chatwindow.cpp \
+		../../gestorbd.cpp \
 		../../loginwindow.cpp \
 		../../main.cpp \
 		../../mainwindow.cpp \
 		../../menucoordinador.cpp \
+		../../menuestudiante.cpp \
 		../../tutorwindow.cpp \
-		../../ventanaalertas.cpp moc_loginwindow.cpp \
+		../../ventanaalertas.cpp moc_chatwindow.cpp \
+		moc_loginwindow.cpp \
 		moc_mainwindow.cpp \
 		moc_menucoordinador.cpp \
+		moc_menuestudiante.cpp \
 		moc_tutorwindow.cpp \
 		moc_ventanaalertas.cpp
-OBJECTS       = gestorbd.o \
+OBJECTS       = chatwindow.o \
+		gestorbd.o \
 		loginwindow.o \
 		main.o \
 		mainwindow.o \
 		menucoordinador.o \
+		menuestudiante.o \
 		tutorwindow.o \
 		ventanaalertas.o \
+		moc_chatwindow.o \
 		moc_loginwindow.o \
 		moc_mainwindow.o \
 		moc_menucoordinador.o \
+		moc_menuestudiante.o \
 		moc_tutorwindow.o \
 		moc_ventanaalertas.o
 DIST          = /usr/lib/x86_64-linux-gnu/qt6/mkspecs/features/spec_pre.prf \
@@ -148,16 +156,20 @@ DIST          = /usr/lib/x86_64-linux-gnu/qt6/mkspecs/features/spec_pre.prf \
 		/usr/lib/x86_64-linux-gnu/qt6/mkspecs/features/lex.prf \
 		../../../../GestionTutorias.pro ../../Estudiante.h \
 		../../Tutor.h \
+		../../chatwindow.h \
 		../../gestorbd.h \
 		../../loginwindow.h \
 		../../mainwindow.h \
 		../../menucoordinador.h \
+		../../menuestudiante.h \
 		../../tutorwindow.h \
-		../../ventanaalertas.h ../../gestorbd.cpp \
+		../../ventanaalertas.h ../../chatwindow.cpp \
+		../../gestorbd.cpp \
 		../../loginwindow.cpp \
 		../../main.cpp \
 		../../mainwindow.cpp \
 		../../menucoordinador.cpp \
+		../../menuestudiante.cpp \
 		../../tutorwindow.cpp \
 		../../ventanaalertas.cpp
 QMAKE_TARGET  = GestionTutorias
@@ -168,7 +180,7 @@ TARGET        = GestionTutorias
 first: all
 ####### Build rules
 
-GestionTutorias: ui_loginwindow.h ui_mainwindow.h ui_menucoordinador.h ui_tutorwindow.h ui_ventanaalertas.h $(OBJECTS)  
+GestionTutorias: ui_chatwindow.h ui_loginwindow.h ui_mainwindow.h ui_menucoordinador.h ui_menuestudiante.h ui_tutorwindow.h ui_ventanaalertas.h $(OBJECTS)  
 	$(LINK) $(LFLAGS) -o $(TARGET)  $(OBJECTS) $(OBJCOMP) $(LIBS)
 
 Makefile: ../../GestionTutorias.pro /usr/lib/x86_64-linux-gnu/qt6/mkspecs/linux-g++/qmake.conf /usr/lib/x86_64-linux-gnu/qt6/mkspecs/features/spec_pre.prf \
@@ -339,9 +351,9 @@ distdir: FORCE
 	@test -d $(DISTDIR) || mkdir -p $(DISTDIR)
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
 	$(COPY_FILE) --parents /usr/lib/x86_64-linux-gnu/qt6/mkspecs/features/data/dummy.cpp $(DISTDIR)/
-	$(COPY_FILE) --parents ../../Estudiante.h ../../Tutor.h ../../gestorbd.h ../../loginwindow.h ../../mainwindow.h ../../menucoordinador.h ../../tutorwindow.h ../../ventanaalertas.h $(DISTDIR)/
-	$(COPY_FILE) --parents ../../gestorbd.cpp ../../loginwindow.cpp ../../main.cpp ../../mainwindow.cpp ../../menucoordinador.cpp ../../tutorwindow.cpp ../../ventanaalertas.cpp $(DISTDIR)/
-	$(COPY_FILE) --parents ../../loginwindow.ui ../../mainwindow.ui ../../menucoordinador.ui ../../tutorwindow.ui ../../ventanaalertas.ui $(DISTDIR)/
+	$(COPY_FILE) --parents ../../Estudiante.h ../../Tutor.h ../../chatwindow.h ../../gestorbd.h ../../loginwindow.h ../../mainwindow.h ../../menucoordinador.h ../../menuestudiante.h ../../tutorwindow.h ../../ventanaalertas.h $(DISTDIR)/
+	$(COPY_FILE) --parents ../../chatwindow.cpp ../../gestorbd.cpp ../../loginwindow.cpp ../../main.cpp ../../mainwindow.cpp ../../menucoordinador.cpp ../../menuestudiante.cpp ../../tutorwindow.cpp ../../ventanaalertas.cpp $(DISTDIR)/
+	$(COPY_FILE) --parents ../../chatwindow.ui ../../loginwindow.ui ../../mainwindow.ui ../../menucoordinador.ui ../../menuestudiante.ui ../../tutorwindow.ui ../../ventanaalertas.ui $(DISTDIR)/
 
 
 clean: compiler_clean 
@@ -373,9 +385,17 @@ compiler_moc_predefs_clean:
 moc_predefs.h: /usr/lib/x86_64-linux-gnu/qt6/mkspecs/features/data/dummy.cpp
 	g++ -pipe -g -std=gnu++1z -Wall -Wextra -fPIC -dM -E -o moc_predefs.h /usr/lib/x86_64-linux-gnu/qt6/mkspecs/features/data/dummy.cpp
 
-compiler_moc_header_make_all: moc_loginwindow.cpp moc_mainwindow.cpp moc_menucoordinador.cpp moc_tutorwindow.cpp moc_ventanaalertas.cpp
+compiler_moc_header_make_all: moc_chatwindow.cpp moc_loginwindow.cpp moc_mainwindow.cpp moc_menucoordinador.cpp moc_menuestudiante.cpp moc_tutorwindow.cpp moc_ventanaalertas.cpp
 compiler_moc_header_clean:
-	-$(DEL_FILE) moc_loginwindow.cpp moc_mainwindow.cpp moc_menucoordinador.cpp moc_tutorwindow.cpp moc_ventanaalertas.cpp
+	-$(DEL_FILE) moc_chatwindow.cpp moc_loginwindow.cpp moc_mainwindow.cpp moc_menucoordinador.cpp moc_menuestudiante.cpp moc_tutorwindow.cpp moc_ventanaalertas.cpp
+moc_chatwindow.cpp: ../../chatwindow.h \
+		../../gestorbd.h \
+		../../Estudiante.h \
+		../../Tutor.h \
+		moc_predefs.h \
+		/usr/lib/qt6/libexec/moc
+	/usr/lib/qt6/libexec/moc $(DEFINES) --include '/home/matas/universidad/cuarto/primer cuatri/is/programa_tutorias_uco/equipo301/build/Desktop-Debug/moc_predefs.h' -I/usr/lib/x86_64-linux-gnu/qt6/mkspecs/linux-g++ -I'/home/matas/universidad/cuarto/primer cuatri/is/programa_tutorias_uco/equipo301' -I/usr/include/x86_64-linux-gnu/qt6 -I/usr/include/x86_64-linux-gnu/qt6/QtWidgets -I/usr/include/x86_64-linux-gnu/qt6/QtGui -I/usr/include/x86_64-linux-gnu/qt6/QtSql -I/usr/include/x86_64-linux-gnu/qt6/QtCore -I. -I/usr/include/c++/13 -I/usr/include/x86_64-linux-gnu/c++/13 -I/usr/include/c++/13/backward -I/usr/lib/gcc/x86_64-linux-gnu/13/include -I/usr/local/include -I/usr/include/x86_64-linux-gnu -I/usr/include ../../chatwindow.h -o moc_chatwindow.cpp
+
 moc_loginwindow.cpp: ../../loginwindow.h \
 		../../tutorwindow.h \
 		../../menucoordinador.h \
@@ -383,37 +403,50 @@ moc_loginwindow.cpp: ../../loginwindow.h \
 		../../ventanaalertas.h \
 		moc_predefs.h \
 		/usr/lib/qt6/libexec/moc
-	/usr/lib/qt6/libexec/moc $(DEFINES) --include /home/pepe/Escritorio/equipo301/build/Desktop-Debug/moc_predefs.h -I/usr/lib/x86_64-linux-gnu/qt6/mkspecs/linux-g++ -I/home/pepe/Escritorio/equipo301 -I/usr/include/x86_64-linux-gnu/qt6 -I/usr/include/x86_64-linux-gnu/qt6/QtWidgets -I/usr/include/x86_64-linux-gnu/qt6/QtGui -I/usr/include/x86_64-linux-gnu/qt6/QtSql -I/usr/include/x86_64-linux-gnu/qt6/QtCore -I. -I/usr/include/c++/13 -I/usr/include/x86_64-linux-gnu/c++/13 -I/usr/include/c++/13/backward -I/usr/lib/gcc/x86_64-linux-gnu/13/include -I/usr/local/include -I/usr/include/x86_64-linux-gnu -I/usr/include ../../loginwindow.h -o moc_loginwindow.cpp
+	/usr/lib/qt6/libexec/moc $(DEFINES) --include '/home/matas/universidad/cuarto/primer cuatri/is/programa_tutorias_uco/equipo301/build/Desktop-Debug/moc_predefs.h' -I/usr/lib/x86_64-linux-gnu/qt6/mkspecs/linux-g++ -I'/home/matas/universidad/cuarto/primer cuatri/is/programa_tutorias_uco/equipo301' -I/usr/include/x86_64-linux-gnu/qt6 -I/usr/include/x86_64-linux-gnu/qt6/QtWidgets -I/usr/include/x86_64-linux-gnu/qt6/QtGui -I/usr/include/x86_64-linux-gnu/qt6/QtSql -I/usr/include/x86_64-linux-gnu/qt6/QtCore -I. -I/usr/include/c++/13 -I/usr/include/x86_64-linux-gnu/c++/13 -I/usr/include/c++/13/backward -I/usr/lib/gcc/x86_64-linux-gnu/13/include -I/usr/local/include -I/usr/include/x86_64-linux-gnu -I/usr/include ../../loginwindow.h -o moc_loginwindow.cpp
 
 moc_mainwindow.cpp: ../../mainwindow.h \
 		moc_predefs.h \
 		/usr/lib/qt6/libexec/moc
-	/usr/lib/qt6/libexec/moc $(DEFINES) --include /home/pepe/Escritorio/equipo301/build/Desktop-Debug/moc_predefs.h -I/usr/lib/x86_64-linux-gnu/qt6/mkspecs/linux-g++ -I/home/pepe/Escritorio/equipo301 -I/usr/include/x86_64-linux-gnu/qt6 -I/usr/include/x86_64-linux-gnu/qt6/QtWidgets -I/usr/include/x86_64-linux-gnu/qt6/QtGui -I/usr/include/x86_64-linux-gnu/qt6/QtSql -I/usr/include/x86_64-linux-gnu/qt6/QtCore -I. -I/usr/include/c++/13 -I/usr/include/x86_64-linux-gnu/c++/13 -I/usr/include/c++/13/backward -I/usr/lib/gcc/x86_64-linux-gnu/13/include -I/usr/local/include -I/usr/include/x86_64-linux-gnu -I/usr/include ../../mainwindow.h -o moc_mainwindow.cpp
+	/usr/lib/qt6/libexec/moc $(DEFINES) --include '/home/matas/universidad/cuarto/primer cuatri/is/programa_tutorias_uco/equipo301/build/Desktop-Debug/moc_predefs.h' -I/usr/lib/x86_64-linux-gnu/qt6/mkspecs/linux-g++ -I'/home/matas/universidad/cuarto/primer cuatri/is/programa_tutorias_uco/equipo301' -I/usr/include/x86_64-linux-gnu/qt6 -I/usr/include/x86_64-linux-gnu/qt6/QtWidgets -I/usr/include/x86_64-linux-gnu/qt6/QtGui -I/usr/include/x86_64-linux-gnu/qt6/QtSql -I/usr/include/x86_64-linux-gnu/qt6/QtCore -I. -I/usr/include/c++/13 -I/usr/include/x86_64-linux-gnu/c++/13 -I/usr/include/c++/13/backward -I/usr/lib/gcc/x86_64-linux-gnu/13/include -I/usr/local/include -I/usr/include/x86_64-linux-gnu -I/usr/include ../../mainwindow.h -o moc_mainwindow.cpp
 
 moc_menucoordinador.cpp: ../../menucoordinador.h \
 		../../mainwindow.h \
 		../../ventanaalertas.h \
 		moc_predefs.h \
 		/usr/lib/qt6/libexec/moc
-	/usr/lib/qt6/libexec/moc $(DEFINES) --include /home/pepe/Escritorio/equipo301/build/Desktop-Debug/moc_predefs.h -I/usr/lib/x86_64-linux-gnu/qt6/mkspecs/linux-g++ -I/home/pepe/Escritorio/equipo301 -I/usr/include/x86_64-linux-gnu/qt6 -I/usr/include/x86_64-linux-gnu/qt6/QtWidgets -I/usr/include/x86_64-linux-gnu/qt6/QtGui -I/usr/include/x86_64-linux-gnu/qt6/QtSql -I/usr/include/x86_64-linux-gnu/qt6/QtCore -I. -I/usr/include/c++/13 -I/usr/include/x86_64-linux-gnu/c++/13 -I/usr/include/c++/13/backward -I/usr/lib/gcc/x86_64-linux-gnu/13/include -I/usr/local/include -I/usr/include/x86_64-linux-gnu -I/usr/include ../../menucoordinador.h -o moc_menucoordinador.cpp
+	/usr/lib/qt6/libexec/moc $(DEFINES) --include '/home/matas/universidad/cuarto/primer cuatri/is/programa_tutorias_uco/equipo301/build/Desktop-Debug/moc_predefs.h' -I/usr/lib/x86_64-linux-gnu/qt6/mkspecs/linux-g++ -I'/home/matas/universidad/cuarto/primer cuatri/is/programa_tutorias_uco/equipo301' -I/usr/include/x86_64-linux-gnu/qt6 -I/usr/include/x86_64-linux-gnu/qt6/QtWidgets -I/usr/include/x86_64-linux-gnu/qt6/QtGui -I/usr/include/x86_64-linux-gnu/qt6/QtSql -I/usr/include/x86_64-linux-gnu/qt6/QtCore -I. -I/usr/include/c++/13 -I/usr/include/x86_64-linux-gnu/c++/13 -I/usr/include/c++/13/backward -I/usr/lib/gcc/x86_64-linux-gnu/13/include -I/usr/local/include -I/usr/include/x86_64-linux-gnu -I/usr/include ../../menucoordinador.h -o moc_menucoordinador.cpp
+
+moc_menuestudiante.cpp: ../../menuestudiante.h \
+		../../gestorbd.h \
+		../../Estudiante.h \
+		../../Tutor.h \
+		../../chatwindow.h \
+		moc_predefs.h \
+		/usr/lib/qt6/libexec/moc
+	/usr/lib/qt6/libexec/moc $(DEFINES) --include '/home/matas/universidad/cuarto/primer cuatri/is/programa_tutorias_uco/equipo301/build/Desktop-Debug/moc_predefs.h' -I/usr/lib/x86_64-linux-gnu/qt6/mkspecs/linux-g++ -I'/home/matas/universidad/cuarto/primer cuatri/is/programa_tutorias_uco/equipo301' -I/usr/include/x86_64-linux-gnu/qt6 -I/usr/include/x86_64-linux-gnu/qt6/QtWidgets -I/usr/include/x86_64-linux-gnu/qt6/QtGui -I/usr/include/x86_64-linux-gnu/qt6/QtSql -I/usr/include/x86_64-linux-gnu/qt6/QtCore -I. -I/usr/include/c++/13 -I/usr/include/x86_64-linux-gnu/c++/13 -I/usr/include/c++/13/backward -I/usr/lib/gcc/x86_64-linux-gnu/13/include -I/usr/local/include -I/usr/include/x86_64-linux-gnu -I/usr/include ../../menuestudiante.h -o moc_menuestudiante.cpp
 
 moc_tutorwindow.cpp: ../../tutorwindow.h \
 		moc_predefs.h \
 		/usr/lib/qt6/libexec/moc
-	/usr/lib/qt6/libexec/moc $(DEFINES) --include /home/pepe/Escritorio/equipo301/build/Desktop-Debug/moc_predefs.h -I/usr/lib/x86_64-linux-gnu/qt6/mkspecs/linux-g++ -I/home/pepe/Escritorio/equipo301 -I/usr/include/x86_64-linux-gnu/qt6 -I/usr/include/x86_64-linux-gnu/qt6/QtWidgets -I/usr/include/x86_64-linux-gnu/qt6/QtGui -I/usr/include/x86_64-linux-gnu/qt6/QtSql -I/usr/include/x86_64-linux-gnu/qt6/QtCore -I. -I/usr/include/c++/13 -I/usr/include/x86_64-linux-gnu/c++/13 -I/usr/include/c++/13/backward -I/usr/lib/gcc/x86_64-linux-gnu/13/include -I/usr/local/include -I/usr/include/x86_64-linux-gnu -I/usr/include ../../tutorwindow.h -o moc_tutorwindow.cpp
+	/usr/lib/qt6/libexec/moc $(DEFINES) --include '/home/matas/universidad/cuarto/primer cuatri/is/programa_tutorias_uco/equipo301/build/Desktop-Debug/moc_predefs.h' -I/usr/lib/x86_64-linux-gnu/qt6/mkspecs/linux-g++ -I'/home/matas/universidad/cuarto/primer cuatri/is/programa_tutorias_uco/equipo301' -I/usr/include/x86_64-linux-gnu/qt6 -I/usr/include/x86_64-linux-gnu/qt6/QtWidgets -I/usr/include/x86_64-linux-gnu/qt6/QtGui -I/usr/include/x86_64-linux-gnu/qt6/QtSql -I/usr/include/x86_64-linux-gnu/qt6/QtCore -I. -I/usr/include/c++/13 -I/usr/include/x86_64-linux-gnu/c++/13 -I/usr/include/c++/13/backward -I/usr/lib/gcc/x86_64-linux-gnu/13/include -I/usr/local/include -I/usr/include/x86_64-linux-gnu -I/usr/include ../../tutorwindow.h -o moc_tutorwindow.cpp
 
 moc_ventanaalertas.cpp: ../../ventanaalertas.h \
 		moc_predefs.h \
 		/usr/lib/qt6/libexec/moc
-	/usr/lib/qt6/libexec/moc $(DEFINES) --include /home/pepe/Escritorio/equipo301/build/Desktop-Debug/moc_predefs.h -I/usr/lib/x86_64-linux-gnu/qt6/mkspecs/linux-g++ -I/home/pepe/Escritorio/equipo301 -I/usr/include/x86_64-linux-gnu/qt6 -I/usr/include/x86_64-linux-gnu/qt6/QtWidgets -I/usr/include/x86_64-linux-gnu/qt6/QtGui -I/usr/include/x86_64-linux-gnu/qt6/QtSql -I/usr/include/x86_64-linux-gnu/qt6/QtCore -I. -I/usr/include/c++/13 -I/usr/include/x86_64-linux-gnu/c++/13 -I/usr/include/c++/13/backward -I/usr/lib/gcc/x86_64-linux-gnu/13/include -I/usr/local/include -I/usr/include/x86_64-linux-gnu -I/usr/include ../../ventanaalertas.h -o moc_ventanaalertas.cpp
+	/usr/lib/qt6/libexec/moc $(DEFINES) --include '/home/matas/universidad/cuarto/primer cuatri/is/programa_tutorias_uco/equipo301/build/Desktop-Debug/moc_predefs.h' -I/usr/lib/x86_64-linux-gnu/qt6/mkspecs/linux-g++ -I'/home/matas/universidad/cuarto/primer cuatri/is/programa_tutorias_uco/equipo301' -I/usr/include/x86_64-linux-gnu/qt6 -I/usr/include/x86_64-linux-gnu/qt6/QtWidgets -I/usr/include/x86_64-linux-gnu/qt6/QtGui -I/usr/include/x86_64-linux-gnu/qt6/QtSql -I/usr/include/x86_64-linux-gnu/qt6/QtCore -I. -I/usr/include/c++/13 -I/usr/include/x86_64-linux-gnu/c++/13 -I/usr/include/c++/13/backward -I/usr/lib/gcc/x86_64-linux-gnu/13/include -I/usr/local/include -I/usr/include/x86_64-linux-gnu -I/usr/include ../../ventanaalertas.h -o moc_ventanaalertas.cpp
 
 compiler_moc_objc_header_make_all:
 compiler_moc_objc_header_clean:
 compiler_moc_source_make_all:
 compiler_moc_source_clean:
-compiler_uic_make_all: ui_loginwindow.h ui_mainwindow.h ui_menucoordinador.h ui_tutorwindow.h ui_ventanaalertas.h
+compiler_uic_make_all: ui_chatwindow.h ui_loginwindow.h ui_mainwindow.h ui_menucoordinador.h ui_menuestudiante.h ui_tutorwindow.h ui_ventanaalertas.h
 compiler_uic_clean:
-	-$(DEL_FILE) ui_loginwindow.h ui_mainwindow.h ui_menucoordinador.h ui_tutorwindow.h ui_ventanaalertas.h
+	-$(DEL_FILE) ui_chatwindow.h ui_loginwindow.h ui_mainwindow.h ui_menucoordinador.h ui_menuestudiante.h ui_tutorwindow.h ui_ventanaalertas.h
+ui_chatwindow.h: ../../chatwindow.ui \
+		/usr/lib/qt6/libexec/uic
+	/usr/lib/qt6/libexec/uic ../../chatwindow.ui -o ui_chatwindow.h
+
 ui_loginwindow.h: ../../loginwindow.ui \
 		/usr/lib/qt6/libexec/uic
 	/usr/lib/qt6/libexec/uic ../../loginwindow.ui -o ui_loginwindow.h
@@ -425,6 +458,10 @@ ui_mainwindow.h: ../../mainwindow.ui \
 ui_menucoordinador.h: ../../menucoordinador.ui \
 		/usr/lib/qt6/libexec/uic
 	/usr/lib/qt6/libexec/uic ../../menucoordinador.ui -o ui_menucoordinador.h
+
+ui_menuestudiante.h: ../../menuestudiante.ui \
+		/usr/lib/qt6/libexec/uic
+	/usr/lib/qt6/libexec/uic ../../menuestudiante.ui -o ui_menuestudiante.h
 
 ui_tutorwindow.h: ../../tutorwindow.ui \
 		/usr/lib/qt6/libexec/uic
@@ -444,6 +481,13 @@ compiler_clean: compiler_moc_predefs_clean compiler_moc_header_clean compiler_ui
 
 ####### Compile
 
+chatwindow.o: ../../chatwindow.cpp ../../chatwindow.h \
+		../../gestorbd.h \
+		../../Estudiante.h \
+		../../Tutor.h \
+		ui_chatwindow.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o chatwindow.o ../../chatwindow.cpp
+
 gestorbd.o: ../../gestorbd.cpp ../../gestorbd.h \
 		../../Estudiante.h \
 		../../Tutor.h
@@ -457,7 +501,9 @@ loginwindow.o: ../../loginwindow.cpp ../../loginwindow.h \
 		ui_loginwindow.h \
 		../../gestorbd.h \
 		../../Estudiante.h \
-		../../Tutor.h
+		../../Tutor.h \
+		../../menuestudiante.h \
+		../../chatwindow.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o loginwindow.o ../../loginwindow.cpp
 
 main.o: ../../main.cpp ../../loginwindow.h \
@@ -487,6 +533,19 @@ menucoordinador.o: ../../menucoordinador.cpp ../../menucoordinador.h \
 		ui_menucoordinador.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o menucoordinador.o ../../menucoordinador.cpp
 
+menuestudiante.o: ../../menuestudiante.cpp ../../menuestudiante.h \
+		../../gestorbd.h \
+		../../Estudiante.h \
+		../../Tutor.h \
+		../../chatwindow.h \
+		ui_menuestudiante.h \
+		../../loginwindow.h \
+		../../tutorwindow.h \
+		../../menucoordinador.h \
+		../../mainwindow.h \
+		../../ventanaalertas.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o menuestudiante.o ../../menuestudiante.cpp
+
 tutorwindow.o: ../../tutorwindow.cpp ../../tutorwindow.h \
 		ui_tutorwindow.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o tutorwindow.o ../../tutorwindow.cpp
@@ -498,6 +557,9 @@ ventanaalertas.o: ../../ventanaalertas.cpp ../../ventanaalertas.h \
 		../../Tutor.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o ventanaalertas.o ../../ventanaalertas.cpp
 
+moc_chatwindow.o: moc_chatwindow.cpp 
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_chatwindow.o moc_chatwindow.cpp
+
 moc_loginwindow.o: moc_loginwindow.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_loginwindow.o moc_loginwindow.cpp
 
@@ -506,6 +568,9 @@ moc_mainwindow.o: moc_mainwindow.cpp
 
 moc_menucoordinador.o: moc_menucoordinador.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_menucoordinador.o moc_menucoordinador.cpp
+
+moc_menuestudiante.o: moc_menuestudiante.cpp 
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_menuestudiante.o moc_menuestudiante.cpp
 
 moc_tutorwindow.o: moc_tutorwindow.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_tutorwindow.o moc_tutorwindow.cpp
