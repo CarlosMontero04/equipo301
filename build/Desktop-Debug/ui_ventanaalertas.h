@@ -16,12 +16,14 @@
 #include <QtWidgets/QLabel>
 #include <QtWidgets/QPushButton>
 #include <QtWidgets/QTableWidget>
+#include <QtWidgets/QVBoxLayout>
 
 QT_BEGIN_NAMESPACE
 
 class Ui_VentanaAlertas
 {
 public:
+    QVBoxLayout *verticalLayout;
     QLabel *label;
     QTableWidget *tablaAlertas;
     QPushButton *btnGestionar;
@@ -32,22 +34,32 @@ public:
         if (VentanaAlertas->objectName().isEmpty())
             VentanaAlertas->setObjectName("VentanaAlertas");
         VentanaAlertas->resize(705, 501);
+        verticalLayout = new QVBoxLayout(VentanaAlertas);
+        verticalLayout->setObjectName("verticalLayout");
         label = new QLabel(VentanaAlertas);
         label->setObjectName("label");
-        label->setGeometry(QRect(250, 50, 201, 18));
         QFont font;
         font.setPointSize(14);
         font.setBold(true);
         label->setFont(font);
+
+        verticalLayout->addWidget(label);
+
         tablaAlertas = new QTableWidget(VentanaAlertas);
         tablaAlertas->setObjectName("tablaAlertas");
-        tablaAlertas->setGeometry(QRect(5, 100, 691, 271));
+
+        verticalLayout->addWidget(tablaAlertas);
+
         btnGestionar = new QPushButton(VentanaAlertas);
         btnGestionar->setObjectName("btnGestionar");
-        btnGestionar->setGeometry(QRect(290, 390, 121, 26));
+
+        verticalLayout->addWidget(btnGestionar);
+
         btnVolver = new QPushButton(VentanaAlertas);
         btnVolver->setObjectName("btnVolver");
-        btnVolver->setGeometry(QRect(10, 460, 88, 26));
+
+        verticalLayout->addWidget(btnVolver);
+
 
         retranslateUi(VentanaAlertas);
 

@@ -1,5 +1,6 @@
 #include "menucoordinador.h"
 #include "ui_menucoordinador.h"
+#include "loginwindow.h"
 
 MenuCoordinador::MenuCoordinador(QWidget *parent)
     : QDialog(parent)
@@ -28,7 +29,7 @@ void MenuCoordinador::on_btnIrAsignacion_clicked()
     // Si MainWindow hereda de QMainWindow, usa mejor esto:
     // connect(w, &QWidget::destroyed, this, &QWidget::show);
 
-    w->show();
+    w->showFullScreen();
 }
 
 // BOTÓN 2: Gestion alertas de riesgos
@@ -43,6 +44,22 @@ void MenuCoordinador::on_btnIrAlertas_clicked()
     // Significa: "Cuando 'v' termine (se cierre), ejecuta 'this->show()' (muéstrame a mí)"
     connect(v, &QDialog::finished, this, &QWidget::show);
 
-    v->show();
+    v->showFullScreen();
+}
+
+
+void MenuCoordinador::on_btnCerrarSesion_clicked()
+{
+    // 1. Cerramos la ventana actual (El Menú de Coordinador)
+    this->close();
+
+    // 2. Creamos una NUEVA ventana de Login
+    LoginWindow *login = new LoginWindow();
+
+    // (Opcional) Para que se borre de la memoria al cerrarse
+    login->setAttribute(Qt::WA_DeleteOnClose);
+
+    // 3. La mostramos
+    login->showFullScreen();;
 }
 

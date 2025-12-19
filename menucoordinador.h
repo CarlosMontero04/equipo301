@@ -22,6 +22,8 @@ private slots:
 
     void on_btnIrAlertas_clicked();
 
+    void on_btnCerrarSesion_clicked();
+
 private:
     Ui::MenuCoordinador *ui;
 };

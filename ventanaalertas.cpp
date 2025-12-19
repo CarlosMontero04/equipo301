@@ -4,12 +4,16 @@
 #include <QSqlQuery>
 #include <QSqlError>
 #include <QMessageBox>
+#include <QHeaderView>
 
 VentanaAlertas::VentanaAlertas(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::VentanaAlertas)
 {
     ui->setupUi(this);
+
+    // --- LÍNEA MÁGICA PARA ESTIRAR LAS COLUMNAS ---
+    ui->tablaAlertas->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
 
     // 1. Configurar Tabla
     ui->tablaAlertas->setColumnCount(5);

@@ -14,34 +14,71 @@
 #include <QtWidgets/QDialog>
 #include <QtWidgets/QLabel>
 #include <QtWidgets/QPushButton>
+#include <QtWidgets/QSpacerItem>
+#include <QtWidgets/QVBoxLayout>
 
 QT_BEGIN_NAMESPACE
 
 class Ui_MenuCoordinador
 {
 public:
+    QVBoxLayout *verticalLayout;
     QLabel *label;
-    QPushButton *btnIrAsignacion;
+    QSpacerItem *horizontalSpacer_3;
     QPushButton *btnIrAlertas;
+    QSpacerItem *horizontalSpacer_2;
+    QPushButton *btnIrAsignacion;
+    QSpacerItem *horizontalSpacer;
+    QPushButton *btnCerrarSesion;
+    QSpacerItem *verticalSpacer;
 
     void setupUi(QDialog *MenuCoordinador)
     {
         if (MenuCoordinador->objectName().isEmpty())
             MenuCoordinador->setObjectName("MenuCoordinador");
         MenuCoordinador->resize(741, 242);
+        verticalLayout = new QVBoxLayout(MenuCoordinador);
+        verticalLayout->setObjectName("verticalLayout");
         label = new QLabel(MenuCoordinador);
         label->setObjectName("label");
-        label->setGeometry(QRect(270, 30, 211, 18));
         QFont font;
         font.setPointSize(14);
         font.setBold(true);
         label->setFont(font);
-        btnIrAsignacion = new QPushButton(MenuCoordinador);
-        btnIrAsignacion->setObjectName("btnIrAsignacion");
-        btnIrAsignacion->setGeometry(QRect(50, 80, 161, 26));
+
+        verticalLayout->addWidget(label);
+
+        horizontalSpacer_3 = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
+
+        verticalLayout->addItem(horizontalSpacer_3);
+
         btnIrAlertas = new QPushButton(MenuCoordinador);
         btnIrAlertas->setObjectName("btnIrAlertas");
-        btnIrAlertas->setGeometry(QRect(530, 80, 131, 26));
+
+        verticalLayout->addWidget(btnIrAlertas);
+
+        horizontalSpacer_2 = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
+
+        verticalLayout->addItem(horizontalSpacer_2);
+
+        btnIrAsignacion = new QPushButton(MenuCoordinador);
+        btnIrAsignacion->setObjectName("btnIrAsignacion");
+
+        verticalLayout->addWidget(btnIrAsignacion);
+
+        horizontalSpacer = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
+
+        verticalLayout->addItem(horizontalSpacer);
+
+        btnCerrarSesion = new QPushButton(MenuCoordinador);
+        btnCerrarSesion->setObjectName("btnCerrarSesion");
+
+        verticalLayout->addWidget(btnCerrarSesion);
+
+        verticalSpacer = new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
+
+        verticalLayout->addItem(verticalSpacer);
+
 
         retranslateUi(MenuCoordinador);
 
@@ -52,8 +89,9 @@ public:
     {
         MenuCoordinador->setWindowTitle(QCoreApplication::translate("MenuCoordinador", "Dialog", nullptr));
         label->setText(QCoreApplication::translate("MenuCoordinador", "MENU COORDINADOR", nullptr));
-        btnIrAsignacion->setText(QCoreApplication::translate("MenuCoordinador", "Asignaci\303\263n autom\303\241tica", nullptr));
         btnIrAlertas->setText(QCoreApplication::translate("MenuCoordinador", "Gesti\303\263n Alertas", nullptr));
+        btnIrAsignacion->setText(QCoreApplication::translate("MenuCoordinador", "Asignaci\303\263n autom\303\241tica", nullptr));
+        btnCerrarSesion->setText(QCoreApplication::translate("MenuCoordinador", "Cerrar Sesi\303\263n", nullptr));
     } // retranslateUi
 
 };
