@@ -19,178 +19,97 @@
    <string>MainWindow</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <widget class="QLabel" name="label">
-    <property name="geometry">
-     <rect>
-      <x>200</x>
-      <y>7</y>
-      <width>401</width>
-      <height>41</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <pointsize>14</pointsize>
-      <bold>true</bold>
-     </font>
-    </property>
-    <property name="text">
-     <string>ASIGNACIÓN AUTOMÁTICA DE TUTORES</string>
-    </property>
-   </widget>
-   <widget class="QTableWidget" name="tablaAsignaciones">
-    <property name="geometry">
-     <rect>
-      <x>30</x>
-      <y>280</y>
-      <width>751</width>
-      <height>401</height>
-     </rect>
-    </property>
-    <column>
-     <property name="text">
-      <string>Estudiante</string>
-     </property>
-    </column>
-    <column>
-     <property name="text">
-      <string>Promedio</string>
-     </property>
-    </column>
-    <column>
-     <property name="text">
-      <string>Tutor Propuesto</string>
-     </property>
-    </column>
-   </widget>
-   <widget class="QPushButton" name="btnCalcular">
-    <property name="geometry">
-     <rect>
-      <x>120</x>
-      <y>770</y>
-      <width>211</width>
-      <height>26</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>CALCULAR ASIGNACIÓN</string>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="btnConfirmar">
-    <property name="enabled">
-     <bool>false</bool>
-    </property>
-    <property name="geometry">
-     <rect>
-      <x>410</x>
-      <y>770</y>
-      <width>201</width>
-      <height>26</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>CONFIRMAR Y GUARDAR</string>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="btnCerrarSesion">
-    <property name="geometry">
-     <rect>
-      <x>680</x>
-      <y>10</y>
-      <width>101</width>
-      <height>26</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>cerrar sesión</string>
-    </property>
-   </widget>
-   <widget class="QCheckBox" name="chkSoloPrimero">
-    <property name="geometry">
-     <rect>
-      <x>120</x>
-      <y>800</y>
-      <width>231</width>
-      <height>24</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Priorizar/Solo asignar 1º Curso</string>
-    </property>
-   </widget>
-   <widget class="QLabel" name="lblResumen">
-    <property name="geometry">
-     <rect>
-      <x>190</x>
-      <y>730</y>
-      <width>491</width>
-      <height>18</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Resumen: Esperando cálculo...</string>
-    </property>
-   </widget>
-   <widget class="QComboBox" name="cmbFacultad">
-    <property name="geometry">
-     <rect>
-      <x>270</x>
-      <y>70</y>
-      <width>331</width>
-      <height>31</height>
-     </rect>
-    </property>
-   </widget>
-   <widget class="QLabel" name="label_2">
-    <property name="geometry">
-     <rect>
-      <x>120</x>
-      <y>80</y>
-      <width>161</width>
-      <height>18</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Seleccione Facultad:</string>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="btnReset">
-    <property name="geometry">
-     <rect>
-      <x>660</x>
-      <y>70</y>
-      <width>88</width>
-      <height>26</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>reset</string>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="btnVolver">
-    <property name="geometry">
-     <rect>
-      <x>10</x>
-      <y>830</y>
-      <width>111</width>
-      <height>26</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <pointsize>11</pointsize>
-     </font>
-    </property>
-    <property name="text">
-     <string>Volver atras</string>
-    </property>
-   </widget>
+   <layout class="QVBoxLayout" name="verticalLayout">
+    <item>
+     <widget class="QLabel" name="label">
+      <property name="font">
+       <font>
+        <pointsize>14</pointsize>
+        <bold>true</bold>
+       </font>
+      </property>
+      <property name="text">
+       <string>ASIGNACIÓN AUTOMÁTICA DE TUTORES</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QComboBox" name="cmbFacultad"/>
+    </item>
+    <item>
+     <widget class="QPushButton" name="btnReset">
+      <property name="text">
+       <string>reset</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QLabel" name="label_2">
+      <property name="text">
+       <string>Seleccione Facultad:</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QTableWidget" name="tablaAsignaciones">
+      <column>
+       <property name="text">
+        <string>Estudiante</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>Promedio</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>Tutor Propuesto</string>
+       </property>
+      </column>
+     </widget>
+    </item>
+    <item>
+     <widget class="QLabel" name="lblResumen">
+      <property name="text">
+       <string>Resumen: Esperando cálculo...</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QPushButton" name="btnCalcular">
+      <property name="text">
+       <string>CALCULAR ASIGNACIÓN</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QPushButton" name="btnConfirmar">
+      <property name="enabled">
+       <bool>false</bool>
+      </property>
+      <property name="text">
+       <string>CONFIRMAR Y GUARDAR</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QPushButton" name="btnVolver">
+      <property name="font">
+       <font>
+        <pointsize>11</pointsize>
+       </font>
+      </property>
+      <property name="text">
+       <string>Volver atras</string>
+      </property>
+     </widget>
+    </item>
+   </layout>
    <zorder>tablaAsignaciones</zorder>
    <zorder>label</zorder>
    <zorder>btnCalcular</zorder>
    <zorder>btnConfirmar</zorder>
-   <zorder>btnCerrarSesion</zorder>
-   <zorder>chkSoloPrimero</zorder>
    <zorder>lblResumen</zorder>
    <zorder>cmbFacultad</zorder>
    <zorder>label_2</zorder>

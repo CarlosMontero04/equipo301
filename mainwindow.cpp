@@ -45,7 +45,7 @@ void MainWindow::on_btnCalcular_clicked()
     // Leer filtros de la pantalla
     QString facultadSeleccionada = ui->cmbFacultad->currentText();
     bool filtrarPorFacultad = (facultadSeleccionada != "--- TODAS LAS FACULTADES ---");
-    bool soloPrimero = ui->chkSoloPrimero->isChecked();
+
 
     // Contadores para el resumen final
     int procesados = 0;
@@ -57,7 +57,7 @@ void MainWindow::on_btnCalcular_clicked()
 
         // --- APLICAR FILTROS (Lo que le faltaba a tu código) ---
         if (filtrarPorFacultad && est.titulacion != facultadSeleccionada) continue;
-        if (soloPrimero && est.curso != 1) continue;
+
 
         procesados++;
         bool fueAsignado = false;
